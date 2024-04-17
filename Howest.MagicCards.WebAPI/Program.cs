@@ -1,11 +1,27 @@
-var builder = WebApplication.CreateBuilder(args);
+
+using Howest.MagicCards.WebAPI.extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Howest.MagicCards.DAL.DBContext;
+using Howest.MagicCards.DAL.Repositories;
+
+var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddResponseCaching();
+services.AddSwaggerGen();
+
+services.AddDbContext<MtgContext>
+    (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
+services.AddScoped<ICardRepository, SqlCardRepository>();
+
+//todo services.AddAutoMapper(new Type[] { typeof(Shared.Mappings.MtgProfile) });
+
+//todo services.AddApiVersioning();
 
 var app = builder.Build();
 

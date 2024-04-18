@@ -1,5 +1,7 @@
-﻿using Howest.MagicCards.DAL.Models;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Filters;
 using Howest.MagicCards.WebAPI.NewFolder;
 using Howest.MagicCards.WebAPI.Wrappers;
@@ -13,31 +15,30 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepo;
+    private readonly IMapper _mapper;
 
-    public CardsController(ICardRepository cardRepo)
+    public CardsController(ICardRepository cardRepo, IMapper mapper)
     {
         _cardRepo = cardRepo;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedResponse<IEnumerable<Card>>), 200)]
+    [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDetailDTO>>), 200)]
     [ProducesResponseType(typeof(string), 404)]
     [ProducesResponseType(typeof(string), 500)]
-    public ActionResult<PagedResponse<IEnumerable<Card>>> GetCards(
-                                                                [FromQuery] CardFilter filter,
-                                                                // IMapper mapper,
-                                                                IOptionsSnapshot<ApiBehaviourConf> options)
+    public ActionResult<PagedResponse<IEnumerable<CardReadDetailDTO>>> GetCards(
+                                                                [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
     {
+        filter.MaxPageSize = options.Value.MaxPageSize;
         try
         {
-            filter.PageSize = options.Value.MaxPageSize;
-
-            Console.WriteLine(filter.PageSize.ToString());
-            if (filter.PageSize <= 0) { }
-            return Ok(new PagedResponse<IEnumerable<Card>>(
+            return Ok(new PagedResponse<IEnumerable<CardReadDetailDTO>>(
                 _cardRepo.getAllCards()
                             .Skip((filter.PageNumber - 1) * filter.PageSize)
-                            .Take(filter.PageSize),
+                            .Take(filter.PageSize)
+                            .ProjectTo<CardReadDetailDTO>(_mapper.ConfigurationProvider)
+                            .ToList(),
                 filter.PageNumber,
                 filter.PageSize
                 ));
@@ -47,7 +48,5 @@ public class CardsController : ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError,
                 $"could not fetch cards because: {ex.Message}");
         }
-
-
     }
 }

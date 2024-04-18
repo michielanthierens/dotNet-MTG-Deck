@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\" />
+    <ProjectReference Include="..\Howest.MagicCards.DAL\Howest.MagicCards.DAL.csproj" />
   </ItemGroup>
 
 </Project>

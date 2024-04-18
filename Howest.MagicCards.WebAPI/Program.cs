@@ -1,6 +1,7 @@
 
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.Shared.Mappings;
 using Howest.MagicCards.WebAPI.extensions;
 using Howest.MagicCards.WebAPI.NewFolder;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,10 @@ services.AddDbContext<MtgContext>
     (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
 services.AddScoped<ICardRepository, SqlCardRepository>();
 
-//todo services.AddAutoMapper(new Type[] { typeof(Shared.Mappings.MtgProfile) });
+services.AddAutoMapper(new Type[]
+{
+    typeof(CardsProfile)
+});
 
 //todo services.AddApiVersioning();
 

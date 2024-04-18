@@ -1,4 +1,4 @@
-﻿namespace Howest.MagicCards.WebAPI.NewFolder
+﻿namespace Howest.MagicCards.WebAPI.BehaviourConf
 {
     public class ApiBehaviourConf
     {

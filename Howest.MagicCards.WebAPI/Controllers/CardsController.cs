@@ -3,13 +3,15 @@ using AutoMapper.QueryableExtensions;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Filters;
-using Howest.MagicCards.WebAPI.NewFolder;
+using Howest.MagicCards.WebAPI.BehaviourConf;
 using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace Howest.MagicCards.WebAPI.Controllers;
 
+[ApiVersion("1.1")]
+[ApiVersion("1.5")]
 [Route("api/[controller]")]
 [ApiController]
 public class CardsController : ControllerBase

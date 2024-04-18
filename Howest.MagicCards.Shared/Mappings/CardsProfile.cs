@@ -13,6 +13,8 @@ public class CardsProfile : Profile
             .ForMember(dto => dto.CardName, opt => opt.MapFrom(p => p.Name))
             .ForMember(dto => dto.Rarity, opt => opt.MapFrom(p => p.RarityCodeNavigation.Name))
             .ForMember(dto => dto.Set, opt => opt.MapFrom(p => p.SetCodeNavigation.Name))
-            .ForMember(dto => dto.ArtistName, opt => opt.MapFrom(p => p.Artist.FullName));
+            .ForMember(dto => dto.ArtistName, opt => opt.MapFrom(p => p.Artist.FullName))
+            .ForMember(dto => dto.CardColors, opt => opt.MapFrom(p => p.CardColors.Select(cc => cc.Color.Name)))
+            .ForMember(dto => dto.CardTypes, opt => opt.MapFrom(p => p.CardTypes.Select(ct => ct.Type.Name)));
     }
 }

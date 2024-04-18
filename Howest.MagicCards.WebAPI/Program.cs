@@ -13,7 +13,7 @@ var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
 services.AddControllers();
 services.AddEndpointsApiExplorer();
-services.AddResponseCaching();
+services.AddMemoryCache();
 services.AddSwaggerGen();
 
 services.Configure<ApiBehaviourConf>(conf.GetSection("ApiSettings"));

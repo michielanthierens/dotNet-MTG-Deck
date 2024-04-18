@@ -14,7 +14,7 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 [ApiVersion("1.5")]
 [Route("api/[controller]")]
 [ApiController]
-[ResponseCache(Duration =20, Location = ResponseCacheLocation.Any)]
+[ResponseCache(Duration = 20, Location = ResponseCacheLocation.Any)]
 public class CardsController : ControllerBase
 {
     private readonly ICardRepository _cardRepo;
@@ -28,8 +28,7 @@ public class CardsController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDetailDTO>>), 200)]
-    [ProducesResponseType(typeof(string), 404)]
-    [ProducesResponseType(typeof(string), 500)]
+    [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
     public ActionResult<PagedResponse<IEnumerable<CardReadDetailDTO>>> GetCards(
                                                                 [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
     {
@@ -49,7 +48,12 @@ public class CardsController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(StatusCodes.Status500InternalServerError,
-                $"could not fetch cards because: {ex.Message}");
+                new Response<CardReadDetailDTO>()
+                {
+                    Succeeded = false,
+                    Errors = [$"Status code: {StatusCodes.Status500InternalServerError}"],
+                    Message = $"({ex.Message})"
+                });
         }
     }
 }

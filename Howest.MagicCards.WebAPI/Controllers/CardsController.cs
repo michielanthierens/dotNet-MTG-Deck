@@ -20,8 +20,10 @@ public class CardsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<PagedResponse<IEnumerable<Card>>> GetCards([FromQuery] CardFilter filter)
+    public ActionResult<PagedResponse<IEnumerable<Card>>> GetCards([FromQuery] CardFilter filter, [FromServices] IConfiguration config)
     {
+        filter.PageSize = int.Parse(config["MaxPageSize"]);
+
         return Ok(new PagedResponse<IEnumerable<Card>>(
             _cardRepo.getAllCards()
                         .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -29,5 +31,5 @@ public class CardsController : ControllerBase
             filter.PageNumber,
             filter.PageSize
             ));
-    }
+    }    
 }

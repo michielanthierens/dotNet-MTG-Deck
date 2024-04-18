@@ -1,10 +1,8 @@
 
-using Howest.MagicCards.WebAPI.extensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.WebAPI.extensions;
+using Microsoft.EntityFrameworkCore;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 

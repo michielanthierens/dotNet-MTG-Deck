@@ -2,6 +2,7 @@
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.WebAPI.extensions;
+using Howest.MagicCards.WebAPI.NewFolder;
 using Microsoft.EntityFrameworkCore;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ services.AddEndpointsApiExplorer();
 services.AddResponseCaching();
 services.AddSwaggerGen();
 
+services.Configure<ApiBehaviourConf>(conf.GetSection("ApiSettings"));
+
 services.AddDbContext<MtgContext>
     (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
 services.AddScoped<ICardRepository, SqlCardRepository>();
@@ -20,6 +23,8 @@ services.AddScoped<ICardRepository, SqlCardRepository>();
 //todo services.AddAutoMapper(new Type[] { typeof(Shared.Mappings.MtgProfile) });
 
 //todo services.AddApiVersioning();
+
+
 
 var app = builder.Build();
 

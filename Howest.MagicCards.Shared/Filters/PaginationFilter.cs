@@ -8,7 +8,7 @@ namespace Howest.MagicCards.Shared.Filters;
 
 public class PaginationFilter
 {
-    const int _maxPageSize = 150;
+    const int _maxPageSize = 20;
 
     private int _pageSize = _maxPageSize;
     private int _pageNumber = 1;

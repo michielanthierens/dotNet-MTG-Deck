@@ -9,7 +9,7 @@ namespace Howest.MagicCards.WebAPI.Wrappers
         public int TotalPages { get; set; }
         public int TotalRecords { get; set; }
 
-        public PagedResponse(T data, int pageNumber, int pageSize)
+        public PagedResponse(T? data, int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;

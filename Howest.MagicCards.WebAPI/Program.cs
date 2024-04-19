@@ -2,7 +2,7 @@
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.Mappings;
-using Howest.MagicCards.WebAPI.extensions;
+using Howest.MagicCards.WebAPI.Extensions;
 using Howest.MagicCards.WebAPI.BehaviourConf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

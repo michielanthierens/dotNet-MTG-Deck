@@ -1,13 +1,19 @@
-var builder = WebApplication.CreateBuilder(args);
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Howest.MagicCards.Shared.FluentValidator;
+using Howest.MagicCards.WebAPI.Extensions;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var (builder, services, conf) = WebApplication.CreateBuilder(args);
+
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.AddFluentValidationAutoValidation();
+
+// services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

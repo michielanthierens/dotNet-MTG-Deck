@@ -60,7 +60,10 @@ public class CardsController : ControllerBase
                 cachedResult,
                 filter.PageNumber,
                 filter.PageSize
-                ));
+                )
+            {
+                TotalRecords = cachedResult.Count()
+            }); ;
         }
         catch (Exception ex)
         {

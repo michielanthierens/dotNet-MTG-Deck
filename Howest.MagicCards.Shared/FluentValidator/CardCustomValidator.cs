@@ -25,3 +25,6 @@ namespace Howest.MagicCards.Shared.FluentValidator;
 
 //    }
 //}
+
+
+// gebruik ook voor CardViewModel in (nodig voor blazor)

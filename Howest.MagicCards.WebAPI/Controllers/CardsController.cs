@@ -18,8 +18,7 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 [ApiController]
 public class CardsController : ControllerBase
 {
-    // todo push key into settings
-    private const string _key = "secretKeyForCaching";
+    // todo push key into settings    
     private readonly ICardRepository _cardRepo;
     private readonly IMapper _mapper;
     private readonly IMemoryCache _cache;
@@ -37,6 +36,7 @@ public class CardsController : ControllerBase
     public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDetailDTO>>>> GetCards(
                                                                 [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
     {
+        string _key = $"CardsKey{filter.MaxPageSize}{filter.PageSize}{filter.PageNumber}";
         filter.MaxPageSize = options.Value.MaxPageSize;
         try
         {

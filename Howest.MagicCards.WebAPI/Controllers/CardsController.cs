@@ -44,10 +44,8 @@ public class CardsController : ControllerBase
         {
             if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDetailDTO> cachedResult))
             {
-                cachedResult = await _cardRepo.getAllCards()
-                            //.ToPagedList(filter.PageNumber, filter.PageSize)
-                            .Skip((filter.PageNumber - 1) * filter.PageSize)
-                            .Take(filter.PageSize)
+                cachedResult = await _cardRepo.getAllCards()                  
+                            .ToPagedList(filter.PageNumber, filter.PageSize)
                             .ProjectTo<CardReadDetailDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();
 
@@ -65,8 +63,8 @@ public class CardsController : ControllerBase
                 filter.PageSize
                 )
             {
-                TotalRecords = cachedResult.Count()
-            }); ;
+                TotalRecords = _cardRepo.getAllCards().Count()
+            });
         }
         catch (Exception ex)
         {

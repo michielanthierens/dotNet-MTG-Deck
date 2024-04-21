@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.Shared.Extensions;
 using Howest.MagicCards.Shared.Filters;
 using Howest.MagicCards.WebAPI.BehaviourConf;
 using Howest.MagicCards.WebAPI.Wrappers;
@@ -18,8 +19,7 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 [ApiController]
 public class CardsController : ControllerBase
 {
-    // todo push key into settings
-    private const string _key = "secretKeyForCaching";
+    // todo push key into settings    
     private readonly ICardRepository _cardRepo;
     private readonly IMapper _mapper;
     private readonly IMemoryCache _cache;
@@ -38,13 +38,14 @@ public class CardsController : ControllerBase
                                                                 [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
     {
         filter.MaxPageSize = options.Value.MaxPageSize;
+
+        string _key = $"CardsKey{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}";
         try
         {
             if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDetailDTO> cachedResult))
             {
-                cachedResult = await _cardRepo.getAllCards()
-                            .Skip((filter.PageNumber - 1) * filter.PageSize)
-                            .Take(filter.PageSize)
+                cachedResult = await _cardRepo.getAllCards()                  
+                            .ToPagedList(filter.PageNumber, filter.PageSize)
                             .ProjectTo<CardReadDetailDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();
 
@@ -60,7 +61,10 @@ public class CardsController : ControllerBase
                 cachedResult,
                 filter.PageNumber,
                 filter.PageSize
-                ));
+                )
+            {
+                TotalRecords = _cardRepo.getAllCards().Count()
+            });
         }
         catch (Exception ex)
         {

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.Shared.Extensions;
 using Howest.MagicCards.Shared.Filters;
 using Howest.MagicCards.WebAPI.BehaviourConf;
 using Howest.MagicCards.WebAPI.Wrappers;
@@ -36,13 +37,15 @@ public class CardsController : ControllerBase
     public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDetailDTO>>>> GetCards(
                                                                 [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
     {
-        string _key = $"CardsKey{filter.MaxPageSize}{filter.PageSize}{filter.PageNumber}";
         filter.MaxPageSize = options.Value.MaxPageSize;
+
+        string _key = $"CardsKey{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}";
         try
         {
             if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDetailDTO> cachedResult))
             {
                 cachedResult = await _cardRepo.getAllCards()
+                            //.ToPagedList(filter.PageNumber, filter.PageSize)
                             .Skip((filter.PageNumber - 1) * filter.PageSize)
                             .Take(filter.PageSize)
                             .ProjectTo<CardReadDetailDTO>(_mapper.ConfigurationProvider)

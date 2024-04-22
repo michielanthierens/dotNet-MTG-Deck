@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphQL\Types\" />
     <Folder Include="GraphQL\Query\" />
   </ItemGroup>
 

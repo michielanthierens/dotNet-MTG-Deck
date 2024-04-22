@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
-services.AddDbContext<MtgContext>(options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
+services.AddDbContext<MtgContext>
+    (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
 services.AddScoped<ICardRepository, SqlCardRepository>();
 // add other repo's 
 
 services.AddScoped<RootSchema>();
-
 services.AddGraphQL()
     .AddGraphTypes(typeof(RootSchema), ServiceLifetime.Scoped)
     .AddDataLoader()

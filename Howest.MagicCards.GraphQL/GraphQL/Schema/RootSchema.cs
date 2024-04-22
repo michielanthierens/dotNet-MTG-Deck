@@ -1,11 +1,7 @@
-﻿namespace Howest.MagicCards.GraphQL.Schema
+﻿namespace Howest.MagicCards.GraphQL
 {
-    public class RootSchema: Schema
+    public class RootSchema : Schema
     {
-        public RootSchema(IServiceProvider provider) : base(provider)
-        {
-            Query = provider.GetRequiredService<RootQuery>();
-            Mutation = provider.GetRequiredService<RootMutation>();
-        }
+        
     }
 }

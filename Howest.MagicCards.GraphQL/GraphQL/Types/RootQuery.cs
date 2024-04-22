@@ -11,6 +11,11 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Types
             Field<ListGraphType<CardType>>(
                 "All Cards",
                 Description = "Get all cards",
+                arguments: new QueryArguments
+                {
+                    new QueryArgument<IntGraphType> { Name = "power" },
+                    new QueryArgument<IntGraphType> { Name = "thoughness" }
+                },
                 resolve: context =>
                 {
                     return cardRepo.getAllCards();
@@ -19,6 +24,10 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Types
             Field<ListGraphType<CardType>>(
                 "All Artists",
                 Description = "Get all artists",
+                arguments: new QueryArguments
+                {
+                    new QueryArgument<IntGraphType> { Name = "limit" },
+                },
                 resolve: context =>
                 {
                     return cardRepo.getAllArtists();

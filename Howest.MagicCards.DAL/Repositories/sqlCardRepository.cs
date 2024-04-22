@@ -20,7 +20,7 @@ public class SqlCardRepository : ICardRepository
 
     public IQueryable<Card> getAllCards()
     {
-        IQueryable<Card> AllCards = _db.Cards.Select(c => c);
+        IQueryable<Card> AllCards = _db.Cards.Select(c => c);        
         return AllCards;
     }
 }

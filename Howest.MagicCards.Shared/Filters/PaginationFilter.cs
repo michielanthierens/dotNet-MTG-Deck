@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Howest.MagicCards.Shared.Filters;
+﻿namespace Howest.MagicCards.Shared.Filters;
 
 public class PaginationFilter
 {
-    const int _maxPageSize = 150;
+    const int _maxPageSize = 10;
 
-    private int _pageSize = _maxPageSize;
+    private int _pageSize = 50;
     private int _pageNumber = 1;
+
+    public int MaxPageSize { get; set; } = _maxPageSize;
+
 
     public int PageNumber
     {
@@ -21,7 +18,7 @@ public class PaginationFilter
 
     public int PageSize
     {
-        get { return _pageSize; }
-        set { _pageSize = (value > _maxPageSize || value < 1) ? _maxPageSize : value; }
+        get { return _pageSize > MaxPageSize ? MaxPageSize : _pageSize; }
+        set { _pageSize = (value < 1) ? MaxPageSize : value; }
     }
 }

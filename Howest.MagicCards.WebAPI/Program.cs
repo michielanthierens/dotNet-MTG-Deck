@@ -1,10 +1,11 @@
 
-using Howest.MagicCards.WebAPI.extensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.Shared.Mappings;
+using Howest.MagicCards.WebAPI.Extensions;
+using Howest.MagicCards.WebAPI.BehaviourConf;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
@@ -12,16 +13,29 @@ var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
 services.AddControllers();
 services.AddEndpointsApiExplorer();
-services.AddResponseCaching();
+services.AddMemoryCache();
 services.AddSwaggerGen();
+
+services.Configure<ApiBehaviourConf>(conf.GetSection("ApiSettings"));
 
 services.AddDbContext<MtgContext>
     (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
 services.AddScoped<ICardRepository, SqlCardRepository>();
 
-//todo services.AddAutoMapper(new Type[] { typeof(Shared.Mappings.MtgProfile) });
+services.AddAutoMapper(new Type[]
+{
+    typeof(CardsProfile)
+});
 
-//todo services.AddApiVersioning();
+
+services.AddApiVersioning(o =>
+{
+    o.ReportApiVersions = true;
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.DefaultApiVersion = new ApiVersion(1, 1);
+});
+
+
 
 var app = builder.Build();
 

@@ -45,7 +45,7 @@ public class CardsController : ControllerBase
             if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDetailDTO> cachedResult))
             {
                 cachedResult = await _cardRepo.getAllCards()
-                            .ToFilteredList()
+                            // .ToFilteredList()
                             .ToPagedList(filter.PageNumber, filter.PageSize)
                             .ProjectTo<CardReadDetailDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();

@@ -1,9 +1,10 @@
 ﻿using GraphQL;
 using GraphQL.Types;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.GraphQL.GraphQL.Types;
 using Howest.MagicCards.Shared.Extensions;
 
-namespace Howest.MagicCards.GraphQL.GraphQL.Types
+namespace Howest.MagicCards.GraphQL.GraphQL.Query
 {
     public class RootQuery : ObjectGraphType
     {
@@ -25,7 +26,7 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Types
                     return cardRepo.getAllCards().ToFilteredListGraphQL(power, toughness);
                 });
 
-            Field<ListGraphType<CardType>>(
+            Field<ListGraphType<ArtistType>>(
                 "All Artists",
                 Description = "Get all artists",
                 arguments: new QueryArguments
@@ -38,7 +39,7 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Types
                     return artistRepo.GetAllArtists().Take(limit);
                 });
 
-            Field<ListGraphType<CardType>>(
+            Field<ObjectGraphType<ArtistType>>(
                 "Artists",
                 Description = "Get artist",
                 arguments: new QueryArguments

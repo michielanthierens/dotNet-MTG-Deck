@@ -27,8 +27,4 @@
     <ProjectReference Include="..\Howest.MagicCards.Shared\Howest.MagicCards.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="GraphQL\Query\" />
-  </ItemGroup>
-
 </Project>

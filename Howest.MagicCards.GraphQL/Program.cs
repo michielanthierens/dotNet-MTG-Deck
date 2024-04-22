@@ -11,7 +11,7 @@ var (builder, services, conf) = WebApplication.CreateBuilder(args);
 services.AddDbContext<MtgContext>
     (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
 services.AddScoped<ICardRepository, SqlCardRepository>();
-// add other repo's 
+services.AddScoped<IArtistRepository, SqlArtistRepository>();
 
 services.AddScoped<RootSchema>();
 services.AddGraphQL()

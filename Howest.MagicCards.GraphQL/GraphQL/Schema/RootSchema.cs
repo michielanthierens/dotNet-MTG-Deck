@@ -1,5 +1,5 @@
 ﻿using GraphQL.Types;
-using Howest.MagicCards.GraphQL.GraphQL.Types;
+using Howest.MagicCards.GraphQL.GraphQL.Query;
 
 namespace Howest.MagicCards.GraphQL.Schemas
 {

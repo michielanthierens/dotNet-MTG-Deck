@@ -1,11 +1,10 @@
-using Howest.MagicCards.DAL.DBContext;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.GraphQL.Schema;
 using Howest.MagicCards.WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Howest.MagicCards.GraphQL.Schema;
-using GraphQL;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
@@ -20,7 +19,6 @@ services.AddGraphQL()
     .AddDataLoader()
     .AddSystemTextJson();
 
-
 var app = builder.Build();
 
 app.UseGraphQL<RootSchema>();
@@ -31,5 +29,7 @@ app.UseGraphQLPlayground(
     {
         EditorTheme = EditorTheme.Light
     });
+
+
 
 app.Run();

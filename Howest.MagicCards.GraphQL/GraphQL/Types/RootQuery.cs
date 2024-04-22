@@ -21,7 +21,7 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Types
                 {
                     int? power = context.GetArgument<int?>("power");
                     int? toughness = context.GetArgument<int?>("toughness");
-                    //todo return filtered list
+
                     return cardRepo.getAllCards().ToFilteredListGraphQL(power, toughness);
                 });
 

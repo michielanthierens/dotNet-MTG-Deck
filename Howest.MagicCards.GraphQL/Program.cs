@@ -2,7 +2,7 @@ using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
-using Howest.MagicCards.GraphQL.Schema;
+using Howest.MagicCards.GraphQL.Schemas;
 using Howest.MagicCards.WebAPI.Extensions;
 using Microsoft.EntityFrameworkCore;
 

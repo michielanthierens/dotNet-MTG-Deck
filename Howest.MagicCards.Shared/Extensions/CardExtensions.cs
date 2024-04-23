@@ -1,9 +1,4 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.Extensions;
 
@@ -13,4 +8,13 @@ public static class CardExtensions
     {
         return null;
     }
+
+    public static IQueryable<Card> ToFilteredListGraphQL(this IQueryable<Card> cards, int? power, int? toughness)
+{
+    return cards.Where(c =>
+        (power == null || c.Power == power.ToString()) &&
+        (toughness == null || c.Toughness == toughness.ToString())
+    );
+}
+
 }

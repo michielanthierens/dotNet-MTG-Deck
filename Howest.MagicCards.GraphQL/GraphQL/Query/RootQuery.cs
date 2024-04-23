@@ -10,13 +10,16 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Query
     {
         public RootQuery(ICardRepository cardRepo, IArtistRepository artistRepo)
         {
+
+            Name = "Query";
+
             Field<ListGraphType<CardType>>(
-                "All Cards",
+                "AllCards",
                 Description = "Get all cards",
                 arguments: new QueryArguments
                 {
                     new QueryArgument<IntGraphType> { Name = "power", DefaultValue = null },
-                    new QueryArgument<IntGraphType> { Name = "thoughness", DefaultValue = null }
+                    new QueryArgument<IntGraphType> { Name = "toughness", DefaultValue = null }
                 },
                 resolve: context =>
                 {
@@ -26,30 +29,30 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Query
                     return cardRepo.getAllCards().ToFilteredListGraphQL(power, toughness);
                 });
 
-            Field<ListGraphType<ArtistType>>(
-                "All Artists",
-                Description = "Get all artists",
-                arguments: new QueryArguments
-                {
-                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 500 },
-                },
-                resolve: context =>
-                {
-                    int limit = context.GetArgument<int>("limit");
-                    return artistRepo.GetAllArtists().Take(limit);
-                });
+            //Field<ListGraphType<ArtistType>>(
+            //    "AllArtists",
+            //    Description = "Get all artists",
+            //    arguments: new QueryArguments
+            //    {
+            //        new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 500 },
+            //    },
+            //    resolve: context =>
+            //    {
+            //        int limit = context.GetArgument<int>("limit");
+            //        return artistRepo.GetAllArtists().Take(limit);
+            //    });
 
-            Field<ObjectGraphType<ArtistType>>(
-                "Artists",
-                Description = "Get artist",
-                arguments: new QueryArguments
-                {
-                    new QueryArgument<IntGraphType> { Name = "artistId"}
-                },
-                resolve: context =>
-                {
-                    return artistRepo.GetArtistById(context.GetArgument<int>("artistId"));
-                });
+            //Field<ObjectGraphType<ArtistType>>(
+            //    "Artist",
+            //    Description = "Get artist",
+            //    arguments: new QueryArguments
+            //    {
+            //        new QueryArgument<IntGraphType> { Name = "artistId"}
+            //    },
+            //    resolve: context =>
+            //    {
+            //        return artistRepo.GetArtistById(context.GetArgument<int>("artistId"));
+            //    });
         }
     }
 }

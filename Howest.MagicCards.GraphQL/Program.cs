@@ -30,6 +30,4 @@ app.UseGraphQLPlayground(
         EditorTheme = EditorTheme.Light
     });
 
-
-
 app.Run();

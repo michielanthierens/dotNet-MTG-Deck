@@ -10,7 +10,7 @@ namespace Howest.MagicCards.Shared.DTO
     {
         public string Number { get; set; }
 
-        public string CardName { get; set; }
+        public string Name { get; set; }
 
         // todo remove these after testing
         public string Type { get; set; }

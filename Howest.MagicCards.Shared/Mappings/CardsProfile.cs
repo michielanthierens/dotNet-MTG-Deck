@@ -19,7 +19,6 @@ public class CardsProfile : Profile
 
         CreateMap<Card, CardReadDTO>()
             .ForMember(dto => dto.Number, opt => opt.MapFrom(opt => opt.Number))
-            .ForMember(dto => dto.CardName, opt => opt.MapFrom(p => p.Name))
             .ForMember(dto => dto.Rarity, opt => opt.MapFrom(p => p.RarityCodeNavigation.Name))
             .ForMember(dto => dto.Set, opt => opt.MapFrom(p => p.SetCodeNavigation.Name))
             .ForMember(dto => dto.ArtistName, opt => opt.MapFrom(p => p.Artist.FullName));

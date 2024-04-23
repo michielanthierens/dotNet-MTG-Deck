@@ -44,9 +44,9 @@ public class CardsController : ControllerBase
     // show details of a card (1.5)
 
     [HttpGet]
-    [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDetailDTO>>), 200)]
-    [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
-    public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDetailDTO>>>> GetCards(
+    [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDTO>>), 200)]
+    [ProducesResponseType(typeof(Response<CardReadDTO>), 500)]
+    public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
                                                                 [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
     {
         filter.MaxPageSize = options.Value.MaxPageSize;
@@ -54,12 +54,12 @@ public class CardsController : ControllerBase
         string _key = $"CardsKey{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}";
         try
         {
-            if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDetailDTO> cachedResult))
+            if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
             {
                 cachedResult = await _cardRepo.getAllCards()
                             // .ToFilteredList()
                             .ToPagedList(filter.PageNumber, filter.PageSize)
-                            .ProjectTo<CardReadDetailDTO>(_mapper.ConfigurationProvider)
+                            .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();
 
                 MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
@@ -70,7 +70,7 @@ public class CardsController : ControllerBase
                 _cache.Set(_key, cachedResult, cacheOptions);
             }
 
-            return Ok(new PagedResponse<IEnumerable<CardReadDetailDTO>>(
+            return Ok(new PagedResponse<IEnumerable<CardReadDTO>>(
                 cachedResult,
                 filter.PageNumber,
                 filter.PageSize
@@ -82,7 +82,7 @@ public class CardsController : ControllerBase
         catch (Exception ex)
         {
             return StatusCode(StatusCodes.Status500InternalServerError,
-                new Response<CardReadDetailDTO>()
+                new Response<CardReadDTO>()
                 {
                     Succeeded = false,
                     Errors = [$"Status code: {StatusCodes.Status500InternalServerError}"],

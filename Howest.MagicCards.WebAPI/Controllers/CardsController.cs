@@ -52,7 +52,7 @@ public class CardsController : ControllerBase
     {
         filter.MaxPageSize = options.Value.MaxPageSize;
 
-        string _key = $"CardsKey{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}";
+        string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.Artist}_{filter.Rarity}_{filter.Type}_{filter.Text}";
 
         try
         {

@@ -23,4 +23,10 @@ public class SqlCardRepository : ICardRepository
         IQueryable<Card> AllCards = _db.Cards.Select(c => c);        
         return AllCards;
     }
+
+    public IQueryable<Card> getCardsByArtist(long? artistId)
+    {    
+        IQueryable<Card> CardsOfArtist = _db.Cards.Select(c => c).Where(c => c.ArtistId.Equals(artistId));
+        return CardsOfArtist;
+    }
 }

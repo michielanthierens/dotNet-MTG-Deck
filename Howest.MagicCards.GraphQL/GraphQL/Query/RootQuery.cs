@@ -29,18 +29,18 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Query
                     return cardRepo.getAllCards().ToFilteredListGraphQL(power, toughness);
                 });
 
-            //Field<ListGraphType<ArtistType>>(
-            //    "AllArtists",
-            //    Description = "Get all artists",
-            //    arguments: new QueryArguments
-            //    {
-            //        new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 500 },
-            //    },
-            //    resolve: context =>
-            //    {
-            //        int limit = context.GetArgument<int>("limit");
-            //        return artistRepo.GetAllArtists().Take(limit);
-            //    });
+            Field<ListGraphType<ArtistType>>(
+                "AllArtists",
+                Description = "Get all artists",
+                arguments: new QueryArguments
+                {
+                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 150 },
+                },
+                resolve: context =>
+                {
+                    int limit = context.GetArgument<int>("limit");
+                    return artistRepo.GetAllArtists().Take(limit);
+                });
 
             //Field<ObjectGraphType<ArtistType>>(
             //    "Artist",

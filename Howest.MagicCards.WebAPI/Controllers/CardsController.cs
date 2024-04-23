@@ -29,15 +29,6 @@ public class CardsController : ControllerBase
         _mapper = mapper;
         _cache = memoryCache;
     }
-
-
-    // filter on:
-    // set
-    // artist (id)
-    // rarity
-    // card type
-    // card text
-
     // sort on:
     // card name (desc/asc) (1.5)
 
@@ -52,14 +43,14 @@ public class CardsController : ControllerBase
     {
         filter.MaxPageSize = options.Value.MaxPageSize;
 
-        string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.Artist}_{filter.Rarity}_{filter.Type}_{filter.Text}";
+        string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}";
 
         try
         {
             if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
             {
                 cachedResult = await _cardRepo.getAllCards()
-                            .ToFilteredList(filter.Name, filter.Set, filter.Artist, filter.Rarity, filter.Type, filter.Text)
+                            .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                             .ToPagedList(filter.PageNumber, filter.PageSize)
                             .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();
@@ -80,7 +71,7 @@ public class CardsController : ControllerBase
             {
                 TotalRecords = _cardRepo
                                     .getAllCards()
-                                    .ToFilteredList(filter.Name, filter.Set, filter.Artist, filter.Rarity, filter.Type, filter.Text)
+                                    .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                     .Count()
             });
         }

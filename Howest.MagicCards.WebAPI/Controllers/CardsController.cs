@@ -78,7 +78,10 @@ public class CardsController : ControllerBase
                 filter.PageSize
                 )
             {
-                TotalRecords = _cardRepo.getAllCards().Count()
+                TotalRecords = _cardRepo
+                                    .getAllCards()
+                                    .ToFilteredList(filter.Name, filter.Set, filter.Artist, filter.Rarity, filter.Type, filter.Text)
+                                    .Count()
             });
         }
         catch (Exception ex)

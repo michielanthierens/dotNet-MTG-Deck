@@ -19,7 +19,6 @@ namespace Howest.MagicCards.WebAPI.Controllers;
 [ApiController]
 public class CardsController : ControllerBase
 {
-    // todo push key into settings    
     private readonly ICardRepository _cardRepo;
     private readonly IMapper _mapper;
     private readonly IMemoryCache _cache;
@@ -30,6 +29,19 @@ public class CardsController : ControllerBase
         _mapper = mapper;
         _cache = memoryCache;
     }
+
+
+    // filter on:
+    // set
+    // artist (id)
+    // rarity
+    // card type
+    // card text
+
+    // sort on:
+    // card name (desc/asc) (1.5)
+
+    // show details of a card (1.5)
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDetailDTO>>), 200)]

@@ -18,10 +18,17 @@ namespace Howest.MagicCards.DAL.Repositories
             return AllArtists;
         }
 
-        public Artist GetArtistById(int id)
+        public Artist GetArtistById(long? id)
         {
-            Artist artist = _db.Artists.FirstOrDefault(c => c.Id == id);
-            return artist;
+            try
+            {
+                Artist artist = _db.Artists.FirstOrDefault(c => c.Id.Equals(id));
+                return artist;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

@@ -5,6 +5,6 @@ namespace Howest.MagicCards.DAL.Repositories
     public interface IArtistRepository
     {
         IQueryable<Artist> GetAllArtists();
-        Artist GetArtistById(int id);
+        Artist GetArtistById(long? id);
     }
 }

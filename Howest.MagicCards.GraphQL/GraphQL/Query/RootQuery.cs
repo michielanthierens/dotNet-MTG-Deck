@@ -42,17 +42,18 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Query
                     return artistRepo.GetAllArtists().Take(limit);
                 });
 
-            //Field<ObjectGraphType<ArtistType>>(
-            //    "Artist",
-            //    Description = "Get artist",
-            //    arguments: new QueryArguments
-            //    {
-            //        new QueryArgument<IntGraphType> { Name = "artistId"}
-            //    },
-            //    resolve: context =>
-            //    {
-            //        return artistRepo.GetArtistById(context.GetArgument<int>("artistId"));
-            //    });
+            Field<ArtistType>(
+                "GetArtist",
+                Description = "Get artist on id",
+                arguments: new QueryArguments
+                {
+                    new QueryArgument<LongGraphType> { Name = "artistId", DefaultValue = null }
+                },
+                resolve: context =>
+                {
+                    long? artistId = context.GetArgument<long?>("artistId");
+                    return artistRepo.GetArtistById(artistId);
+                });
         }
     }
 }

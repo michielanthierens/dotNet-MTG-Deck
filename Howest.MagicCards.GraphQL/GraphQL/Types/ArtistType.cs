@@ -11,10 +11,10 @@ namespace Howest.MagicCards.GraphQL.GraphQL.Types
             Name = "Artist";
 
             Field(a => a.FullName, type: typeof(StringGraphType));
-            //Field<ListGraphType<CardType>>(
-            //    "cards",
-            //    resolve: context => context.Source.Cards
-            //);
+            Field<ListGraphType<CardType>>(
+                "cards",
+                resolve: context => context.Source.Cards
+            );
         }
     }
 }

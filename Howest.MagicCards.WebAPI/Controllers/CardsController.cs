@@ -47,7 +47,8 @@ public class CardsController : ControllerBase
     [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDTO>>), 200)]
     [ProducesResponseType(typeof(Response<CardReadDTO>), 500)]
     public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
-                                                                [FromQuery] CardFilter filter, IOptionsSnapshot<ApiBehaviourConf> options)
+                                                                [FromQuery] CardFilter filter,
+                                                                IOptionsSnapshot<ApiBehaviourConf> options)
     {
         filter.MaxPageSize = options.Value.MaxPageSize;
 

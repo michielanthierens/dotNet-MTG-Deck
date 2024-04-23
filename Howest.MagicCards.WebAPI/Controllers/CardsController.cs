@@ -53,12 +53,13 @@ public class CardsController : ControllerBase
         filter.MaxPageSize = options.Value.MaxPageSize;
 
         string _key = $"CardsKey{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}";
+
         try
         {
             if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
             {
                 cachedResult = await _cardRepo.getAllCards()
-                            // .ToFilteredList()
+                            .ToFilteredList(filter.Name, filter.Set, filter.Artist, filter.Rarity, filter.Type, filter.Text)
                             .ToPagedList(filter.PageNumber, filter.PageSize)
                             .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
                             .ToListAsync();

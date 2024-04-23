@@ -1,16 +1,19 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.Extensions;
 
 public static class CardExtensions
 {
-    public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, int setId, int ArtistId, int RaratyId, int CardTypeId, string CardText)
+    public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, string? name, string? set, string? artist, string? rarity, string? type, string? text)
     {
-        return null;
+        return cards.Where(card =>
+                card.Name.Equals(name) &&
+                card.SetCode.Equals(set) &&
+                card.Artist.FullName.Equals(artist) &&
+                card.RarityCode.Equals(rarity) &&
+                card.Type.Equals(type) &&
+                card.Text.Equals(text));
     }
+
+
 }

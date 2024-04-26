@@ -1,4 +1,5 @@
 ﻿using Howest.MagicCards.DAL.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Howest.MagicCards.Shared.Extensions;
 
@@ -40,5 +41,16 @@ public static class CardExtensions
         }
 
         return filteredCards;
+    }
+
+    public static IQueryable<Card> SortOnCardName(this IQueryable<Card> cards, string orderByQueryString)
+    {
+        return orderByQueryString switch
+        {
+            "asc" => cards.OrderBy(card => card.Name),
+            "desc" => cards.OrderByDescending(card => card.Name),
+            _ => cards,
+        };
+
     }
 }

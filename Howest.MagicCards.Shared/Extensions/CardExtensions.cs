@@ -4,23 +4,23 @@ namespace Howest.MagicCards.Shared.Extensions;
 
 public static class CardExtensions
 {
-    public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, string? name, string? set, string? artistName, string? rarityCode, string? type, string? text)
+    public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, string? name, string? setId, string? artistName, string? rarityCode, string? type, string? text)
     {
         IQueryable<Card> filteredCards = cards;
 
         if (name != null)
         {
-            filteredCards = filteredCards.Where(card => card.Name.Equals(name));
+            filteredCards = filteredCards.Where(card => card.Name.Contains(name));
         }
 
-        if (set != null)
+        if (setId != null)
         {
-            filteredCards = filteredCards.Where(card => card.SetCode.Equals(set));
+            filteredCards = filteredCards.Where(card => card.SetCode.Equals(setId));
         }
 
         if (artistName != null)
         {
-            filteredCards = filteredCards.Where(card => card.Artist.FullName.Equals(artistName));
+            filteredCards = filteredCards.Where(card => card.Artist.FullName.Contains(artistName));
         }
 
         if (rarityCode != null)
@@ -30,12 +30,13 @@ public static class CardExtensions
 
         if (type != null)
         {
-            filteredCards = filteredCards.Where(card => card.Type.Equals(type));
+            filteredCards = filteredCards.Where(card =>
+                card.Type.Contains(type));
         }
 
         if (text != null)
         {
-            filteredCards = filteredCards.Where(card => card.Text.Equals(text));
+            filteredCards = filteredCards.Where(card => card.Text.Contains(text));
         }
 
         return filteredCards;

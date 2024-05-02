@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Extensions;
@@ -11,10 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace Howest.MagicCards.WebAPI.Controllers
+namespace Howest.MagicCards.WebAPI.Controllers.V1_1
 {
     [ApiVersion("1.1")]
-    [ApiVersion("1.5")]
     [Route("api/[controller]")]
     [ApiController]
     public class CardsController : ControllerBase
@@ -30,7 +30,6 @@ namespace Howest.MagicCards.WebAPI.Controllers
             _cache = memoryCache;
         }
 
-        [MapToApiVersion("1.1")]
         [HttpGet]
         [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDTO>>), 200)]
         [ProducesResponseType(typeof(Response<CardReadDTO>), 500)]
@@ -83,18 +82,38 @@ namespace Howest.MagicCards.WebAPI.Controllers
                     });
             }
         }
+    }
+}
 
-        [MapToApiVersion("1.5")]
+namespace Howest.MagicCards.WebAPI.Controllers.V1_5
+{
+    [ApiVersion("1.5")]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CardsController : ControllerBase
+    {
+        private readonly ICardRepository _cardRepo;
+        private readonly IMapper _mapper;
+        private readonly IMemoryCache _cache;
+
+        public CardsController(ICardRepository cardRepo, IMapper mapper, IMemoryCache memoryCache)
+        {
+            _cardRepo = cardRepo;
+            _mapper = mapper;
+            _cache = memoryCache;
+        }
+
         [HttpGet]
         [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDTO>>), 200)]
         [ProducesResponseType(typeof(Response<CardReadDTO>), 500)]
-        public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCardsWithSorting(
+        public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
                                                                     [FromQuery] CardFilter filter,
+                                                                    [FromQuery] string sort,
                                                                     IOptionsSnapshot<ApiBehaviourConf> options)
         {
             filter.MaxPageSize = options.Value.MaxPageSize;
 
-            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.SetId}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}_{filter.Sort}";
+            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.SetId}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}_{sort}";
 
             try
             {
@@ -102,7 +121,7 @@ namespace Howest.MagicCards.WebAPI.Controllers
                 {
                     cachedResult = await _cardRepo.getAllCards()
                                 .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
-                                .SortOnCardName(filter.Sort)
+                                .SortOnCardName(sort)
                                 .ToPagedList(filter.PageNumber, filter.PageSize)
                                 .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
                                 .ToListAsync();
@@ -137,6 +156,17 @@ namespace Howest.MagicCards.WebAPI.Controllers
                         Message = $"({ex.Message})"
                     });
             }
+        }
+
+        [HttpGet("{id:int}", Name = "getCardDetail")]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 200)]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 404)]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
+        public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(int id)
+        {
+            return (await _cardRepo.GetCardbyId(id) is Card foundCard)
+                ? Ok(new Response<CardReadDetailDTO>(_mapper.Map<CardReadDetailDTO>(foundCard)))
+                : NotFound($"No book found with id {id}");
         }
     }
 }

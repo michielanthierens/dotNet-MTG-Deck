@@ -164,9 +164,46 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
         public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(int id)
         {
-            return (await _cardRepo.GetCardbyId(id) is Card foundCard)
-                ? Ok(new Response<CardReadDetailDTO>(_mapper.Map<CardReadDetailDTO>(foundCard)))
-                : NotFound($"No book found with id {id}");
+
+            string _key = $"CardDetail-{id}";
+
+            try
+            {
+                if (!_cache.TryGetValue(_key, out CardReadDetailDTO cachedCard))
+                {
+
+                    Card card = await _cardRepo.GetCardbyId(id);
+
+                    if (card is not Card)
+                    {
+                        return NotFound($"No book found with id {id}");
+                    }
+
+                    CardReadDetailDTO foundCard = _mapper.Map<CardReadDetailDTO>(card);
+
+                    MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                    };
+
+                    _cache.Set(_key, foundCard, cacheOptions);
+
+                    return Ok(new Response<CardReadDetailDTO>(foundCard));
+                } else
+                {
+                    return Ok(new Response<CardReadDetailDTO>(cachedCard));
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response<CardReadDTO>()
+                    {
+                        Succeeded = false,
+                        Errors = [$"Status code: {StatusCodes.Status500InternalServerError}"],
+                        Message = $"({ex.Message})"
+                    });
+            }
         }
     }
 }

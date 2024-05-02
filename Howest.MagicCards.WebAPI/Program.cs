@@ -50,7 +50,6 @@ o.ReportApiVersions = true;
 o.AssumeDefaultVersionWhenUnspecified = true;
 o.DefaultApiVersion = new ApiVersion(1, 1);
 o.ApiVersionReader = ApiVersionReader.Combine(
-    new QueryStringApiVersionReader("version"),
     new HeaderApiVersionReader("api-version"),
     new MediaTypeApiVersionReader("v"));
 });

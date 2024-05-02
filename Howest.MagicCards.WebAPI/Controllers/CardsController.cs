@@ -169,30 +169,26 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
             try
             {
-                if (!_cache.TryGetValue(_key, out CardReadDetailDTO cachedCard))
+                if (_cache.TryGetValue(_key, out CardReadDetailDTO cachedCard)) return Ok(new Response<CardReadDetailDTO>(cachedCard));
+
+                Card card = await _cardRepo.GetCardbyId(id);
+
+                if (card is not Card)
                 {
-
-                    Card card = await _cardRepo.GetCardbyId(id);
-
-                    if (card is not Card)
-                    {
-                        return NotFound($"No book found with id {id}");
-                    }
-
-                    CardReadDetailDTO foundCard = _mapper.Map<CardReadDetailDTO>(card);
-
-                    MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
-                    };
-
-                    _cache.Set(_key, foundCard, cacheOptions);
-
-                    return Ok(new Response<CardReadDetailDTO>(foundCard));
-                } else
-                {
-                    return Ok(new Response<CardReadDetailDTO>(cachedCard));
+                    return NotFound($"No book found with id {id}");
                 }
+
+                CardReadDetailDTO foundCard = _mapper.Map<CardReadDetailDTO>(card);
+
+                MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                };
+
+                _cache.Set(_key, foundCard, cacheOptions);
+
+                return Ok(new Response<CardReadDetailDTO>(foundCard));
+
             }
             catch (Exception ex)
             {

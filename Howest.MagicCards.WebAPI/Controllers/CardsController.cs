@@ -11,9 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
-namespace Howest.MagicCards.WebAPI.Controllers.v1
+namespace Howest.MagicCards.WebAPI.Controllers
 {
     [ApiVersion("1.1")]
+    [ApiVersion("1.5")]
     [Route("api/[controller]")]
     [ApiController]
     public class CardsController : ControllerBase
@@ -29,6 +30,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.v1
             _cache = memoryCache;
         }
 
+        [MapToApiVersion("1.1")]
         [HttpGet]
         [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDTO>>), 200)]
         [ProducesResponseType(typeof(Response<CardReadDTO>), 500)]
@@ -81,34 +83,12 @@ namespace Howest.MagicCards.WebAPI.Controllers.v1
                     });
             }
         }
-    }
-}
 
-namespace Howest.MagicCards.WebAPI.Controllers.v2
-{
-    [ApiVersion("1.5")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CardsController : ControllerBase
-    {
-        private readonly ICardRepository _cardRepo;
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-
-        public CardsController(ICardRepository cardRepo, IMapper mapper, IMemoryCache memoryCache)
-        {
-            _cardRepo = cardRepo;
-            _mapper = mapper;
-            _cache = memoryCache;
-        }
-        // sort on:
-        // card name (desc/asc) (1.5)
-
-        // show details of a card (1.5)
+        [MapToApiVersion("1.5")]
         [HttpGet]
         [ProducesResponseType(typeof(PagedResponse<IEnumerable<CardReadDTO>>), 200)]
         [ProducesResponseType(typeof(Response<CardReadDTO>), 500)]
-        public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCards(
+        public async Task<ActionResult<PagedResponse<IEnumerable<CardReadDTO>>>> GetCardsWithSorting(
                                                                     [FromQuery] CardFilter filter,
                                                                     IOptionsSnapshot<ApiBehaviourConf> options)
         {

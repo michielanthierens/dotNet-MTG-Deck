@@ -46,13 +46,28 @@ services.AddAutoMapper(new Type[]
 
 services.AddApiVersioning(o =>
 {
-    o.ReportApiVersions = true;
-    o.AssumeDefaultVersionWhenUnspecified = true;
-    o.DefaultApiVersion = new ApiVersion(1, 1);
-    o.ApiVersionReader = ApiVersionReader.Combine(
-                                               new QueryStringApiVersionReader("version"),
-                                               new HeaderApiVersionReader("api-version"));
+o.ReportApiVersions = true;
+o.AssumeDefaultVersionWhenUnspecified = true;
+o.DefaultApiVersion = new ApiVersion(1, 1);
+o.ApiVersionReader = ApiVersionReader.Combine(
+    new QueryStringApiVersionReader("version"),
+    new HeaderApiVersionReader("api-version"),
+    new MediaTypeApiVersionReader("v"));
 });
+
+builder.Services.AddVersionedApiExplorer(
+    options =>
+    {
+        // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
+        // note: the specified format code will format the version as "'v'major[.minor][-status]"
+        options.GroupNameFormat = "'v'VVV";
+
+        // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+        // can also be used to control the format of the API version in route templates
+        options.SubstituteApiVersionInUrl = true;
+    }
+);
+
 
 
 var app = builder.Build();
@@ -61,7 +76,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1.1/swagger.json", "CardsAPI v1.1");
+        c.SwaggerEndpoint("/swagger/v1.5/swagger.json", "CardsAPI v1.5");
+    });
 }
 
 app.UseHttpsRedirection();

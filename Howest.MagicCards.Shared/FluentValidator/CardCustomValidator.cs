@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.Shared.DTO;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.FluentValidator;
 
-public class CardCustomValidator : AbstractValidator<DeckWriteDTO>
+public class CardCustomValidator : AbstractValidator<DeckCard>
 {
     public CardCustomValidator()
     {

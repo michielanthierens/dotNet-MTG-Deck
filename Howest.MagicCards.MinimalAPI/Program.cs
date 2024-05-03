@@ -20,27 +20,6 @@ services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
 //todo change to own apibehaviourconf
 services.Configure<ApiBehaviourConf>(conf.GetSection("ApiSettings"));
 
-#region testingMongoDB
-//string connectionstring = conf.GetConnectionString(name: "mongoDB");
-//string databaseName = conf.GetConnectionString(name: "database");
-//string collectionName = conf.GetConnectionString(name: "collection");
-
-//var client = new MongoClient(connectionstring);
-//var db = client.GetDatabase(databaseName);
-//var collection = db.GetCollection<DeckCard>(collectionName);
-
-//var card = new DeckCard { id = "2", name = "swords", amount = 12 };
-
-//await collection.InsertOneAsync(card);
-
-//var result = await collection.FindAsync(_ => true);
-
-//foreach (var res in result.ToList())
-//{
-//    Console.WriteLine($"{res.id}: {res.name}, {res.amount}");
-//}
-#endregion
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

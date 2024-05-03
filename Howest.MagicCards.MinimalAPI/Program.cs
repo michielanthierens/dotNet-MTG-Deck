@@ -1,11 +1,13 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
-using Howest.MagicCards.WebAPI.Extensions;
-using MongoDB.Driver;
 using Howest.MagicCards.DAL.Models;
-using Howest.MagicCards.DAL.DBContext;
-using Microsoft.EntityFrameworkCore;
+using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.MinimalAPI.extensions;
+using Howest.MagicCards.Shared.FluentValidator;
 using Howest.MagicCards.WebAPI.BehaviourConf;
-using Amazon.Runtime.Internal.Util;
+using Howest.MagicCards.WebAPI.Extensions;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
@@ -13,27 +15,31 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddFluentValidationAutoValidation();
 
-// services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
-
+services.AddSingleton<IDeckRepository, DeckRepository>();
+services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
+//todo change to own apibehaviourconf
 services.Configure<ApiBehaviourConf>(conf.GetSection("ApiSettings"));
-string connectionstring = conf.GetConnectionString(name: "mongoDB");
-string databaseName = conf.GetConnectionString(name: "database");
-string collectionName = conf.GetConnectionString(name: "collection");
 
-var client = new MongoClient(connectionstring);
-var db = client.GetDatabase(databaseName);
-var collection = db.GetCollection<Deck>(collectionName);
+#region testingMongoDB
+//string connectionstring = conf.GetConnectionString(name: "mongoDB");
+//string databaseName = conf.GetConnectionString(name: "database");
+//string collectionName = conf.GetConnectionString(name: "collection");
 
-var card = new Deck { id = "1", name = "daggers", amount = 1 };
+//var client = new MongoClient(connectionstring);
+//var db = client.GetDatabase(databaseName);
+//var collection = db.GetCollection<DeckCard>(collectionName);
 
-await collection.InsertOneAsync(card);
+//var card = new DeckCard { id = "2", name = "swords", amount = 12 };
 
-var result = await collection.FindAsync(_ => true);
+//await collection.InsertOneAsync(card);
 
-foreach (var res in result.ToList())
-{
-    Console.WriteLine($"{res.id}: {res.name}, {res.amount}");
-}
+//var result = await collection.FindAsync(_ => true);
+
+//foreach (var res in result.ToList())
+//{
+//    Console.WriteLine($"{res.id}: {res.name}, {res.amount}");
+//}
+#endregion
 
 var app = builder.Build();
 
@@ -43,9 +49,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
-app.MapGet("/", () => "Hello world");
+RouteGroupBuilder deckGroup = app.MapGroup($"deck").WithTags("deck");
+
+deckGroup.MapDeckEndpoints();
 
 app.Run();
 

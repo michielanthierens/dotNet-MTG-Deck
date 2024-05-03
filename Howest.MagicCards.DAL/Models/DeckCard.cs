@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Howest.MagicCards.DAL.Models;
-public class Deck
+public class DeckCard
 {
     public string id { get; set; }
     public string name { get; set; }

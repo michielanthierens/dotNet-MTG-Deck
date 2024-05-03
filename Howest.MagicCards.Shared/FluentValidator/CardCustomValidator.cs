@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.FluentValidator;
 
-//public class CardCustomValidator : AbstractValidator<CardWriteDTO>
-//{
-//    public CardCustomValidator() 
-//    {
+public class CardCustomValidator : AbstractValidator<DeckWriteDTO>
+{
+    public CardCustomValidator()
+    {
         //RuleFor(c => c.CardName)
         //    .NotNull()
         //    .NotEmpty()
@@ -23,8 +23,8 @@ namespace Howest.MagicCards.Shared.FluentValidator;
         //    .NotEmpty()
         //    .NotNull()
 
-//    }
-//}
+    }
+}
 
 
 // gebruik ook voor CardViewModel in (nodig voor blazor)

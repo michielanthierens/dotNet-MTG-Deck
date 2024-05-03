@@ -4,9 +4,9 @@ namespace Howest.MagicCards.DAL.Repositories
 {
     public interface IDeckRepository
     {
-        void addCardToDeck(DeckCard card);
-        void clearDeck();
-        void increaseAmount();
-        void removeCardFromDeck(string number);
+        Task addCardToDeck(string id, string name);
+        Task clearDeck();
+        Task<IEnumerable<DeckCard>> GetDeck();
+        Task removeCardFromDeck(string number);
     }
 }

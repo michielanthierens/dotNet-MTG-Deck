@@ -1,13 +1,10 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.MinimalAPI.extensions;
 using Howest.MagicCards.Shared.FluentValidator;
 using Howest.MagicCards.WebAPI.BehaviourConf;
 using Howest.MagicCards.WebAPI.Extensions;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 

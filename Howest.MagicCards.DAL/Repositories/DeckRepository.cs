@@ -1,5 +1,4 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
@@ -24,11 +23,11 @@ public class DeckRepository : IDeckRepository
         return db.GetCollection<T>(collection);
     }
 
-    private async Task<IEnumerable<DeckCard>> GetDeck()
+    public async Task<IEnumerable<DeckCard>> GetDeck()
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
         IAsyncCursor<DeckCard> deckCards = await deckCollection.FindAsync(_ => true);
-        
+
         return deckCards.ToEnumerable();
     }
 
@@ -39,16 +38,14 @@ public class DeckRepository : IDeckRepository
         return (DeckCard)card;
     }
 
-    public Task addCardToDeck(DeckCard card)
+    public Task addCardToDeck(string id, string name)
     {
-        // check if < 60
-        // check if exsist
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        if (getCardOnId(card.id) != null) 
+        if (getCardOnId(id) is DeckCard foundCard)
         {
-            changeAmount(card, 1);
+            changeAmount(foundCard, 1);
         }
-        return deckCollection.InsertOneAsync(card);
+        return deckCollection.InsertOneAsync(new DeckCard { id = id, name = name, amount = 0 });
     }
 
     public Task removeCardFromDeck(string number)
@@ -62,7 +59,8 @@ public class DeckRepository : IDeckRepository
                 changeAmount(card, -1);
             }
             return deckCollection.DeleteOneAsync(c => c.id == number);
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             return null;
         }
@@ -80,7 +78,4 @@ public class DeckRepository : IDeckRepository
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
         return deckCollection.DeleteManyAsync(_ => true);
     }
-
-
-
 }

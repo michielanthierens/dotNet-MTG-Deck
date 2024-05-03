@@ -1,4 +1,5 @@
 ﻿using Howest.MagicCards.DAL.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
@@ -18,38 +19,66 @@ public class DeckRepository : IDeckRepository
 
     private IMongoCollection<T> ConnectToMongoDB<T>(in string collection)
     {
-        var client = new MongoClient(_connectionString);
-        var db = client.GetDatabase(_databaseName);
+        MongoClient client = new MongoClient(_connectionString);
+        IMongoDatabase db = client.GetDatabase(_databaseName);
         return db.GetCollection<T>(collection);
     }
 
     private async Task<IEnumerable<DeckCard>> GetDeck()
     {
-        var deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
+        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
         IAsyncCursor<DeckCard> deckCards = await deckCollection.FindAsync(_ => true);
         
         return deckCards.ToEnumerable();
     }
 
-    public void addCardToDeck(DeckCard card)
+    private DeckCard getCardOnId(string id)
+    {
+        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
+        var card = deckCollection.Find(c => c.id.Equals(id));
+        return (DeckCard)card;
+    }
+
+    public Task addCardToDeck(DeckCard card)
     {
         // check if < 60
+        // check if exsist
+        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
+        if (getCardOnId(card.id) != null) 
+        {
+            changeAmount(card, 1);
+        }
+        return deckCollection.InsertOneAsync(card);
     }
 
-    public void removeCardFromDeck(string number)
+    public Task removeCardFromDeck(string number)
     {
-
+        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
+        try
+        {
+            DeckCard card = getCardOnId(number);
+            if (card.amount > 1)
+            {
+                changeAmount(card, -1);
+            }
+            return deckCollection.DeleteOneAsync(c => c.id == number);
+        } catch (Exception)
+        {
+            return null;
+        }
+    }
+    private void changeAmount(DeckCard card, int amount)
+    {
+        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
+        var filter = Builders<DeckCard>.Filter.Eq("id", card.id);
+        card.amount += amount;
+        deckCollection.ReplaceOneAsync(filter, card, new ReplaceOptions { IsUpsert = true });
     }
 
-    public void increaseAmount()
+    public Task clearDeck()
     {
-        // check if < 60
-
-    }
-
-    public void clearDeck()
-    {
-
+        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
+        return deckCollection.DeleteManyAsync(_ => true);
     }
 
 

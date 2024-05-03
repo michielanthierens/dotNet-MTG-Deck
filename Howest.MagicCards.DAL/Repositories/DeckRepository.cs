@@ -1,4 +1,5 @@
 ﻿using Howest.MagicCards.DAL.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
@@ -9,7 +10,7 @@ public class DeckRepository : IDeckRepository
     private readonly string _connectionString;
     private readonly string _databaseName;
     private readonly string _deckCollection;
-    public DeckRepository(ConfigurationManager conf)
+    public DeckRepository(IConfiguration conf)
     {
         _connectionString = conf.GetConnectionString(name: "mongoDB");
         _databaseName = conf.GetConnectionString(name: "database");
@@ -31,17 +32,17 @@ public class DeckRepository : IDeckRepository
         return deckCards.ToEnumerable();
     }
 
-    private DeckCard getCardOnId(string id)
+    private DeckCard getCardOnIdAsync(string id)
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        var card = deckCollection.Find(c => c.id.Equals(id));
-        return (DeckCard)card;
+        DeckCard card =  deckCollection.Find(c => c.id.Equals(id)).FirstOrDefault();
+        return card;
     }
 
     public Task addCardToDeck(string id, string name)
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        if (getCardOnId(id) is DeckCard foundCard)
+        if (getCardOnIdAsync(id) is DeckCard foundCard)
         {
             changeAmount(foundCard, 1);
         }
@@ -53,7 +54,7 @@ public class DeckRepository : IDeckRepository
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
         try
         {
-            DeckCard card = getCardOnId(number);
+            DeckCard card = getCardOnIdAsync(number);
             if (card.amount > 1)
             {
                 changeAmount(card, -1);

@@ -16,13 +16,13 @@ public static class DeckEndpoints
         deckGroup.MapPut("/add", async (string id, string name, [FromServices] IDeckRepository deckRepo) =>
         {
 
-            await deckRepo.addCardToDeck(id, name);
+            deckRepo.addCardToDeck(id, name);
             return Results.Ok("card updated");
         });
 
         deckGroup.MapPut("/remove", async (string id, [FromServices] IDeckRepository deckRepo) =>
         {
-            await deckRepo.removeCardFromDeck(id);
+            deckRepo.removeCardFromDeck(id);
             return Results.Ok("card updated");
         });
 

@@ -1,6 +1,7 @@
 ﻿using Howest.MagicCards.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Howest.MagicCards.DAL.Repositories;
@@ -32,46 +33,46 @@ public class DeckRepository : IDeckRepository
         return deckCards.ToEnumerable();
     }
 
-    private DeckCard getCardOnIdAsync(string id)
+    public void addCardToDeck(string id, string name)
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        DeckCard card =  deckCollection.Find(c => c.id.Equals(id)).FirstOrDefault();
-        return card;
-    }
 
-    public Task addCardToDeck(string id, string name)
-    {
-        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        if (getCardOnIdAsync(id) is DeckCard foundCard)
+        DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
+
+        if (foundCard != null)
         {
-            changeAmount(foundCard, 1);
+            foundCard.amount++;
+            var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
+            var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
+            deckCollection.UpdateOne(filter, update);
         }
-        return deckCollection.InsertOneAsync(new DeckCard { id = id, name = name, amount = 0 });
+        else
+        {
+            deckCollection.InsertOne(new DeckCard() { id = id, name = name, amount = 1 });
+        }
+
     }
 
-    public Task removeCardFromDeck(string number)
+    public void removeCardFromDeck(string id)
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        try
+
+        DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
+
+        if (foundCard != null)
         {
-            DeckCard card = getCardOnIdAsync(number);
-            if (card.amount > 1)
+            if (foundCard.amount > 1)
             {
-                changeAmount(card, -1);
+                foundCard.amount--;
+                var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
+                var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
+                deckCollection.UpdateOne(filter, update);
             }
-            return deckCollection.DeleteOneAsync(c => c.id == number);
+            else
+            {
+                deckCollection.DeleteOne(card => card.id == id);
+            }
         }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
-    private void changeAmount(DeckCard card, int amount)
-    {
-        IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
-        var filter = Builders<DeckCard>.Filter.Eq("id", card.id);
-        card.amount += amount;
-        deckCollection.ReplaceOneAsync(filter, card, new ReplaceOptions { IsUpsert = true });
     }
 
     public Task clearDeck()

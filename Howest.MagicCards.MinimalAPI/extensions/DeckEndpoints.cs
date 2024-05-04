@@ -16,7 +16,7 @@ public static class DeckEndpoints
         deckGroup.MapPut("/add", async (string id, string name, [FromServices] IDeckRepository deckRepo) =>
         {
 
-            deckRepo.addCardToDeck(id, name);
+            deckRepo.addCardToDeckAsync(id, name);
             return Results.Ok("card updated");
         });
 

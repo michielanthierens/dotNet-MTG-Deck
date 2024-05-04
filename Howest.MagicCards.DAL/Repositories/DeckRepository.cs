@@ -1,7 +1,5 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Howest.MagicCards.DAL.Repositories;
@@ -11,11 +9,13 @@ public class DeckRepository : IDeckRepository
     private readonly string _connectionString;
     private readonly string _databaseName;
     private readonly string _deckCollection;
+    private readonly int _maxDeckSize;
     public DeckRepository(IConfiguration conf)
     {
         _connectionString = conf.GetConnectionString(name: "mongoDB");
         _databaseName = conf.GetConnectionString(name: "database");
         _deckCollection = conf.GetConnectionString(name: "collection");
+        _maxDeckSize = conf.GetValue<int>("MaxDeckSize");
     }
 
     private IMongoCollection<T> ConnectToMongoDB<T>(in string collection)
@@ -33,24 +33,26 @@ public class DeckRepository : IDeckRepository
         return deckCards.ToEnumerable();
     }
 
-    public void addCardToDeck(string id, string name)
+    public async Task addCardToDeckAsync(string id, string name)
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
 
-        DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
-
-        if (foundCard != null)
+        if (await checkDeckSizeAsync())
         {
-            foundCard.amount++;
-            var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
-            var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
-            deckCollection.UpdateOne(filter, update);
-        }
-        else
-        {
-            deckCollection.InsertOne(new DeckCard() { id = id, name = name, amount = 1 });
-        }
+            DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
 
+            if (foundCard != null)
+            {
+                foundCard.amount++;
+                var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
+                var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
+                deckCollection.UpdateOne(filter, update);
+            }
+            else
+            {
+                deckCollection.InsertOne(new DeckCard() { id = id, name = name, amount = 1 });
+            }
+        }
     }
 
     public void removeCardFromDeck(string id)
@@ -79,5 +81,17 @@ public class DeckRepository : IDeckRepository
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
         return deckCollection.DeleteManyAsync(_ => true);
+    }
+
+    private async Task<bool> checkDeckSizeAsync()
+    {
+        IEnumerable<DeckCard> cards = await GetDeck();
+        int totalAmount = cards.Sum(Card => Card.amount);
+
+        if (totalAmount < _maxDeckSize) {
+            return true;        
+        }
+        return false;
+
     }
 }

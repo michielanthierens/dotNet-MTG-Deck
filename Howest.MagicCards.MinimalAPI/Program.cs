@@ -1,18 +1,21 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Howest.MagicCards.DAL.Repositories;
+using Howest.MagicCards.MinimalAPI.extensions;
 using Howest.MagicCards.Shared.FluentValidator;
-using Howest.MagicCards.WebAPI.Extensions;
+using Howest.MagicCards.WebAPI.extensions;
 
 var (builder, services, conf) = WebApplication.CreateBuilder(args);
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
-
 services.AddFluentValidationAutoValidation();
 
-// services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
+services.AddSingleton<IDeckRepository, DeckRepository>();
+services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
+//todo change to own apibehaviourconf
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -22,7 +25,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () => "Hello world");
+RouteGroupBuilder deckGroup = app.MapGroup($"deck").WithTags("deck");
+
+deckGroup.MapDeckEndpoints();
 
 app.Run();
 

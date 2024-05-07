@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.Shared.DTO;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,27 @@ using System.Threading.Tasks;
 
 namespace Howest.MagicCards.Shared.FluentValidator;
 
-//public class CardCustomValidator : AbstractValidator<CardWriteDTO>
-//{
-//    public CardCustomValidator() 
-//    {
-        //RuleFor(c => c.CardName)
-        //    .NotNull()
-        //    .NotEmpty()
-        //    .WithMessage("The cardName cannot be blank")
-        //    .Length(2, 50)
-        //    .WithMessage("The name of the card should be between 2 and 50 characters");
+public class CardCustomValidator : AbstractValidator<DeckCard>
+{
+    public CardCustomValidator()
+    {
+        RuleFor(c => c.id)
+            .NotNull()
+            .NotEmpty()
+            .WithMessage("The id can't be blank")
+            .Length(1, 4);
 
-        //RuleFor(c => c.Rarity)
-        //    .NotEmpty()
-        //    .NotNull()
+        RuleFor(c => c.name)
+            .NotNull()
+            .NotEmpty()
+            .WithMessage("The name cannot be blank")
+            .WithMessage("The name of the card should be between 2 and 50 characters");
 
-//    }
-//}
+        RuleFor(c => c.amount)
+            .NotEmpty()
+            .NotNull();
+    }
+}
 
 
 // gebruik ook voor CardViewModel in (nodig voor blazor)

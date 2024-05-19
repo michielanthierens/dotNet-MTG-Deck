@@ -6,6 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddHttpClient("WebAPI", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("WebAPI"));
+});
+
+builder.Services.AddHttpClient("MinimalAPI", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("MinimalApi"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,9 @@
+@inject IHttpClientFactory httpClientFactory
+
+@if (filteredCards == null)
+{
+    <p><em>Loading</em></p>
+} else
+{
+    <FilteredCardsList cards="filteredCards"></FilteredCardsList>
+}

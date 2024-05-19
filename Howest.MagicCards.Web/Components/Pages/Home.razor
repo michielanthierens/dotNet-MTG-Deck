@@ -1,25 +1,19 @@
 ﻿@page "/"
+@inject IHttpClientFactory httpClientFactory
 
 <PageTitle>MTG Deck Builder</PageTitle>
 
 <h1>MTG Deck Builder</h1>
 
 <div id="allCards">
-    @* <FilterForm/>
-    *@
+    <FilterForm/>
+   
+    <FilteredCards/>
 
-@*     @if (cards == null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        <CardList cards="cards"></CardList>
-    } *@
 </div>
 
 <div id="deckCards">
-    @* <Deck />*@
+    <DeckCards />
 </div>
 
 @code {

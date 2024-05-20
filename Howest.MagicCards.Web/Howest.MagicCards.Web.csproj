@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Howest.MagicCards.Shared\Howest.MagicCards.Shared.csproj" />
+    <ProjectReference Include="..\Howest.MagicCards.WebAPI\Howest.MagicCards.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

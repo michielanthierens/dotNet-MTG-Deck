@@ -1,0 +1,13 @@
+@using Howest.MagicCards.WebAPI.Wrappers
+
+@foreach (CardReadDTO card in Cards)
+{
+    <div class="cardImage">
+        <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.Number"/>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IEnumerable<CardReadDTO> Cards { get; set; }
+}

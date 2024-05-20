@@ -40,6 +40,8 @@ public static class CardExtensions
             filteredCards = filteredCards.Where(card => card.Text.Contains(text));
         }
 
+        filteredCards = filteredCards.Where(card => card.OriginalImageUrl != null);
+
         return filteredCards;
     }
 

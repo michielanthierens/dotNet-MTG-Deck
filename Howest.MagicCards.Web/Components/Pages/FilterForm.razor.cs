@@ -8,6 +8,8 @@ namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class FilterForm
     {
+
+
         public string message { get; set; }
                 public JsonSerializerOptions JsonOptions { get; }
 

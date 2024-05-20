@@ -1,41 +1,63 @@
 @inject IHttpClientFactory httpClientFactory
 
-<EditForm Model="@Filter" OnValidSubmit="@GetFilteredCards">
-
-@*     <DataAnnotationsValidator/>
-    <ValidationSummary/> *@
+<EditForm Model="@filter" >
 
     <div class="form-group">
         <label for="Name">Name:</label>
-        <InputText @bind-Value="Filter.Name" id="Name" class="form-control"></InputText>
-@*         <ValidationSummary/> *@
+        <InputText @bind-Value="filter.Name" id="Name" class="form-control"></InputText>
     </div>
 
     <div class="form-group">
         <label for="SetId">SetId:</label>
-        <InputText id="SetId" @bind-Value="Filter.SetId" class="form-control"></InputText>
-        @* <ValidationMessage For="@(() => Name)"  *@/>
+        <InputText id="SetId" @bind-Value="filter.SetId" class="form-control"></InputText>
     </div>
     <div class="form-group">
         <label for="ArtistName">Artist:</label>
-        <InputText id="ArtistName" @bind-Value="Filter.ArtistName" class="form-control"></InputText>
-        @* <ValidationMessage For="@(() => ArtistName)" *@ />
+        <InputText id="ArtistName" @bind-Value="filter.ArtistName" class="form-control"></InputText>
     </div>
     <div class="form-group">
         <label for="RarityCode">Rarity:</label>
-        <InputSelect id="RarityCode" @bind-Value="Filter.RarityCode" class="form-control">
+        <InputSelect id="RarityCode" @bind-Value="filter.RarityCode" class="form-control">
+            @if(rarities != null @@ rarities.Any()) {
             @foreach (RarityDTO rarity in rarities)
             {
                 <option value="@rarity.RarityCode">@rarity.Rarity</option>
             }
+            } else
+                {
+            <option disabled>Loading rarities...</option>
+                }
         </InputSelect>        
     </div>
+    <div class="form-group">
+        <label for="Type">Type:</label>
+        <InputText id="Type" @bind-Value="filter.Type" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="Text">Text:</label>
+        <InputText id="Text" @bind-Value="filter.Text" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="Sort">Sorting order: </label>
+        <InputSelect id="Sort" @bind-Value="filter.Sort" class="form-control">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="PageSize">Number of results:</label>
+        <InputNumber id="PageSize" @bind-Value="filter.PageSize" class="form-control"></InputNumber>
+    </div>
 
+    <div class="form-group">
+        <label for="PageNumber">Page:</label>
+        <InputNumber id="PageNumber" @bind-Value="filter.PageNumber" class="form-control"></InputNumber>
+    </div>
+
+    <button type="submit">search</button>
 </EditForm>
 
 @code {
-    public CardFilter Filter { get; set; }
-
-    public IEnumerable<RarityDTO> rarities { get; set; }
+    CardFilter filter { get; set; } = new();
+    IEnumerable<RarityDTO> rarities { get; set; }
 }
-

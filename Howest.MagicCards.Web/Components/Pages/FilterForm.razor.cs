@@ -1,11 +1,16 @@
 ﻿using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Filters;
+using Microsoft.AspNetCore.Components;
 using System.Text.Json;
 
 namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class FilterForm
     {
+        [Parameter]
+        public string FormName { get; set; }
+        [Parameter]
+        public EventCallback<CardFilter> OnFilterChanged { get; set; }
         private CardFilter filter { get; set; } = new();
         private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
         private string message { get; set; }
@@ -17,6 +22,10 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 PropertyNameCaseInsensitive = true,
             };
+        }
+        private async Task GetFilteredCards()
+        {
+            await OnFilterChanged.InvokeAsync(filter);
         }
 
         protected override async Task OnInitializedAsync()
@@ -37,11 +46,6 @@ namespace Howest.MagicCards.Web.Components.Pages
                 rarities = new List<RarityDTO>();
                 message = $"Error: {response.ReasonPhrase}";
             }
-        }
-
-        private async Task GetFilteredCards()
-        {
-            // Implement the method to get filtered cards based on the filter criteria.
         }
     }
 }

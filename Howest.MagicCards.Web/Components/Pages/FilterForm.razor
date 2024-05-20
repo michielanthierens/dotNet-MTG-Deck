@@ -1,6 +1,6 @@
 @inject IHttpClientFactory httpClientFactory
 
-<EditForm Model="@filter" OnValidSubmit="@GetFilteredCards">
+<EditForm Model="@filter" OnValidSubmit="@GetFilteredCards" Context="FormName">
     <div class="form-group">
         <label for="Name">Name:</label>
         <InputText @bind-Value="filter.Name" id="Name" class="form-control"></InputText>

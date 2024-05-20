@@ -1,6 +1,10 @@
-﻿using Howest.MagicCards.Shared.DTO;
+﻿using Amazon.Runtime.Internal.Transform;
+using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.Shared.Filters;
 using Howest.MagicCards.WebAPI.Wrappers;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 
 
@@ -8,17 +12,10 @@ namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class FilteredCards
     {
+        [Parameter]
+        public CardFilter Filter { get; set; }
         public IEnumerable<CardReadDTO> filteredCards { get; set; }
         public string message { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string SetId { get; set; } = string.Empty;
-        public string ArtistName { get; set; } = string.Empty;
-        public string RarityCode { get; set; } = string.Empty;
-        public string Card_Type { get; set; } = string.Empty;
-        public string Card_Text { get; set; } = string.Empty;
-        public string PageNumber { get; set; } = string.Empty;
-        public string PageSize { get; set; } = string.Empty;
-        public string Sort { get; set; } = "asc";
         public JsonSerializerOptions JsonOptions { get; }
 
         public FilteredCards()
@@ -36,24 +33,24 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             var queryParams = new Dictionary<string, string>();
 
-            if (!string.IsNullOrEmpty(Name))
-                queryParams.Add("Name", Name);
-            if (!string.IsNullOrEmpty(SetId))
-                queryParams.Add("SetId", SetId);
-            if (!string.IsNullOrEmpty(ArtistName))
-                queryParams.Add("ArtistName", ArtistName);
-            if (!string.IsNullOrEmpty(RarityCode))
-                queryParams.Add("RarityCode", RarityCode);
-            if (!string.IsNullOrEmpty(Card_Type))
-                queryParams.Add("Type", Card_Type);
-            if (!string.IsNullOrEmpty(Card_Text))
-                queryParams.Add("Text", Card_Text);
-            if (!string.IsNullOrEmpty(PageNumber))
-                queryParams.Add("PageNumber", PageNumber);
-            if (!string.IsNullOrEmpty(PageSize))
-                queryParams.Add("PageSize", PageSize);
+            if (!string.IsNullOrEmpty(Filter.Name))
+                queryParams.Add("Name", Filter.Name);
+            if (!string.IsNullOrEmpty(Filter.SetId))
+                queryParams.Add("SetId", Filter.SetId);
+            if (!string.IsNullOrEmpty(Filter.ArtistName))
+                queryParams.Add("ArtistName", Filter.ArtistName);
+            if (!string.IsNullOrEmpty(Filter.RarityCode))
+                queryParams.Add("RarityCode", Filter.RarityCode);
+            if (!string.IsNullOrEmpty(Filter.Type))
+                queryParams.Add("Type", Filter.Type);
+            if (!string.IsNullOrEmpty(Filter.Text))
+                queryParams.Add("Text", Filter.Text);
+            if (!string.IsNullOrEmpty(Filter.PageNumber.ToString()))
+                queryParams.Add("PageNumber", Filter.PageNumber.ToString());
+            if (!string.IsNullOrEmpty(Filter.PageSize.ToString()))
+                queryParams.Add("PageSize", Filter.PageSize.ToString());
 
-            queryParams.Add("sort", Sort);
+            queryParams.Add("sort", Filter.Sort);
 
             string url = QueryHelpers.AddQueryString("Cards", queryParams);
 

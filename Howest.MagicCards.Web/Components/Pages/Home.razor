@@ -6,10 +6,8 @@
 <h1>MTG Deck Builder</h1>
 
 <div id="allCards">
-    <FilterForm onFilterChanged="@HandleFilterChanged"/>
-   
-    <FilteredCards Filter="@filter"/>
-
+    <FilterForm OnFilterChanged="HandleFilterChanged" FormName="filterForm"/>
+    <FilteredCards Filter="@filter" />
 </div>
 
 <div id="deckCards">
@@ -17,9 +15,9 @@
 </div>
 
 @code {
-    private CardFilter filter { get; set; }
+    private CardFilter filter { get; set; } = new CardFilter();
 
-    private void HandleFilterChanged(CardFilter newFilter)
+    private async Task HandleFilterChanged(CardFilter newFilter)
     {
         filter = newFilter;
     }

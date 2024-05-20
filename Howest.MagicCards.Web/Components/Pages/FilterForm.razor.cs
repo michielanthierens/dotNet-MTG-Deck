@@ -8,10 +8,10 @@ namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class FilterForm
     {
-
-
-        public string message { get; set; }
-                public JsonSerializerOptions JsonOptions { get; }
+        private CardFilter filter { get; set; } = new();
+        private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
+        private string message { get; set; }
+        private JsonSerializerOptions JsonOptions { get; }
 
         public FilterForm()
         {
@@ -19,12 +19,6 @@ namespace Howest.MagicCards.Web.Components.Pages
             {
                 PropertyNameCaseInsensitive = true,
             };
-        }
-
-
-        private async Task GetFilteredCards()
-        {                        
-
         }
 
         protected override async Task OnInitializedAsync()
@@ -38,17 +32,18 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                IEnumerable<RarityDTO> result = JsonSerializer.Deserialize<IEnumerable<RarityDTO>>(apiResponse, JsonOptions);
-
-                rarities = result.ToList();
-            } else
+                rarities = JsonSerializer.Deserialize<IEnumerable<RarityDTO>>(apiResponse, JsonOptions);
+            }
+            else
             {
                 rarities = new List<RarityDTO>();
-
                 message = $"Error: {response.ReasonPhrase}";
             }
+        }
 
-
+        private async Task GetFilteredCards()
+        {
+            // Implement the method to get filtered cards based on the filter criteria.
         }
     }
 }

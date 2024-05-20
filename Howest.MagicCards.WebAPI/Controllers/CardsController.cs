@@ -164,7 +164,6 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
         public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(int id)
         {
-
             string _key = $"CardDetail-{id}";
 
             try
@@ -187,7 +186,45 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
                 _cache.Set(_key, foundCard, cacheOptions);
 
-                return Ok(new Response<CardReadDetailDTO>(foundCard));
+                return Ok(value: new Response<CardReadDetailDTO>(foundCard));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response<CardReadDTO>()
+                    {
+                        Succeeded = false,
+                        Errors = [$"Status code: {StatusCodes.Status500InternalServerError}"],
+                        Message = $"({ex.Message})"
+                    });
+            }
+        }
+
+        [HttpGet("rarities", Name = "getRarities")]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 200)]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
+        public async Task<ActionResult<Response<IEnumerable<RarityDTO>>>> GetRariries()
+        {
+            string _key = $"All-Rarities";
+
+            try
+            {
+                if (!_cache.TryGetValue(_key, out IEnumerable<RarityDTO> cachedResult))
+                {
+                    cachedResult = await _cardRepo.GetRarities()                                
+                                .ProjectTo<RarityDTO>(_mapper.ConfigurationProvider)
+                                .ToListAsync();
+
+                    MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                    };
+
+                    _cache.Set(_key, cachedResult, cacheOptions);
+                }
+
+                return Ok(cachedResult);
 
             }
             catch (Exception ex)

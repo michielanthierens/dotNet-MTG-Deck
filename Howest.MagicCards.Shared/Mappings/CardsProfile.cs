@@ -20,6 +20,10 @@ public class CardsProfile : Profile
         CreateMap<Card, CardReadDTO>()
             .ForMember(dto => dto.Number, opt => opt.MapFrom(opt => opt.Number))
             .ForMember(dto => dto.OriginalImageUrl, opt => opt.MapFrom(opt => opt.OriginalImageUrl));
+
+        CreateMap<Rarity, RarityDTO>()
+            .ForMember(dto => dto.RarityCode, opt => opt.MapFrom(p => p.Code))
+            .ForMember(dto => dto.Rarity, opt => opt.MapFrom(p => p.Name));
     }
 
     

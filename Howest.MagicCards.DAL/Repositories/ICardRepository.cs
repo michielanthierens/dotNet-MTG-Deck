@@ -7,5 +7,6 @@ namespace Howest.MagicCards.DAL.Repositories
         IQueryable<Card> getAllCards();
         Task<Card> GetCardbyId(int id);
         IQueryable<Card> getCardsByArtist(long? artistId);
+        IQueryable<Rarity> GetRarities();
     }
 }

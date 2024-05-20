@@ -1,0 +1,41 @@
+@inject IHttpClientFactory httpClientFactory
+
+<EditForm Model="@Filter" OnValidSubmit="@GetFilteredCards">
+
+@*     <DataAnnotationsValidator/>
+    <ValidationSummary/> *@
+
+    <div class="form-group">
+        <label for="Name">Name:</label>
+        <InputText @bind-Value="Filter.Name" id="Name" class="form-control"></InputText>
+@*         <ValidationSummary/> *@
+    </div>
+
+    <div class="form-group">
+        <label for="SetId">SetId:</label>
+        <InputText id="SetId" @bind-Value="Filter.SetId" class="form-control"></InputText>
+        @* <ValidationMessage For="@(() => Name)"  *@/>
+    </div>
+    <div class="form-group">
+        <label for="ArtistName">Artist:</label>
+        <InputText id="ArtistName" @bind-Value="Filter.ArtistName" class="form-control"></InputText>
+        @* <ValidationMessage For="@(() => ArtistName)" *@ />
+    </div>
+    <div class="form-group">
+        <label for="RarityCode">Rarity:</label>
+        <InputSelect id="RarityCode" @bind-Value="Filter.RarityCode" class="form-control">
+            @foreach (RarityDTO rarity in rarities)
+            {
+                <option value="@rarity.RarityCode">@rarity.Rarity</option>
+            }
+        </InputSelect>        
+    </div>
+
+</EditForm>
+
+@code {
+    public CardFilter Filter { get; set; }
+
+    public IEnumerable<RarityDTO> rarities { get; set; }
+}
+

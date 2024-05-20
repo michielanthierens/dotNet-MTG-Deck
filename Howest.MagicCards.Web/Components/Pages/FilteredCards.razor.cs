@@ -3,6 +3,7 @@ using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Json;
 
+
 namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class FilteredCards
@@ -29,7 +30,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         }
 
         protected override async Task OnInitializedAsync()
-        {   
+        {
             HttpClient httpClient = httpClientFactory.CreateClient("WebAPI");
             httpClient.DefaultRequestHeaders.Add("api-version", "1.5");
 

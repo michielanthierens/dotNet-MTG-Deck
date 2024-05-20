@@ -1,13 +1,40 @@
+@using Amazon.Runtime
 @using Howest.MagicCards.WebAPI.Wrappers
+@inject IHttpClientFactory httpClientFactory
+
 <h1>all cards:</h1>
-@foreach (CardReadDTO card in Cards)
+<p>@message</p>
+@foreach (CardReadDTO card in Cards) 
 {
     <div class="cardImage">
-        <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.Number"/>
+        <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.Number"
+             @onclick:preventDefault="true"
+             @onclick="@(() => AddCardToDeck(card))"
+         />
     </div>
 }
 
 @code {
     [Parameter]
-    public IEnumerable<CardReadDTO> Cards { get; set; }
+    public IEnumerable<CardReadDTO> Cards { get; set; }   
+
+    public string message { get; set; }
+
+    public async Task AddCardToDeck(CardReadDTO card)
+    {
+        HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
+        var content = new StringContent(string.Empty);
+
+        HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.Number}_{card.Name}&name={card.Name}", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // todo refresh deck
+        }
+        else
+        {
+            message = $"Error: {response.ReasonPhrase}";
+        }
+    }
+
 }

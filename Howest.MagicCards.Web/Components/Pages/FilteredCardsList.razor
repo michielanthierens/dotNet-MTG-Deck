@@ -1,8 +1,9 @@
 @using Howest.MagicCards.WebAPI.Wrappers
-
+<h1>all cards:</h1>
 @foreach (CardReadDTO card in Cards)
 {
     <div class="cardImage">
+        <p>@card.Name</p>
         <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.Number"/>
     </div>
 }

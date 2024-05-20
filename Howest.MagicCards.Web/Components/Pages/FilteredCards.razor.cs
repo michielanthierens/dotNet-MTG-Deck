@@ -20,7 +20,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         public string MaxPageSize { get; set; }
         public string PageNumber { get; set; }
         public string PageSize { get; set; }
-        public string Sort { get; set; }
+        public string Sort { get; set; } = "asc";
         public JsonSerializerOptions JsonOptions { get; }
 
         public FilteredCards()
@@ -34,6 +34,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             HttpClient httpClient = httpClientFactory.CreateClient("WebAPI");
+            httpClient.DefaultRequestHeaders.Add("api-version", "1.5");
             HttpResponseMessage response = await httpClient.GetAsync($"Cards?" +
                                                                     $"Name={Name}&" +
                                                                     $"SetId={SetId}&" +
@@ -44,7 +45,7 @@ namespace Howest.MagicCards.Web.Components.Pages
                                                                     $"MaxPageSize={MaxPageSize}&" +
                                                                     $"PageNumber={PageNumber}&" +
                                                                     $"PageSize={PageSize}&" +
-                                                                    $"sort={Sort}");
+                                                                    $"sort={Sort}");                                                                   
 
             string apiResponse = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

@@ -6,12 +6,21 @@
 <h1>MTG Deck Builder</h1>
 
 <div id="allCards">
-    <FilterForm/>
+    <FilterForm onFilterChanged="@HandleFilterChanged"/>
    
-    <FilteredCards/>
+    <FilteredCards Filter="@filter"/>
 
 </div>
 
 <div id="deckCards">
     <DeckCards />
 </div>
+
+@code {
+    private CardFilter filter { get; set; }
+
+    private void HandleFilterChanged(CardFilter newFilter)
+    {
+        filter = newFilter;
+    }
+}

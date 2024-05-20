@@ -1,7 +1,5 @@
-﻿using Howest.MagicCards.DAL.Models;
-using Howest.MagicCards.Shared.DTO;
+﻿using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.Shared.Filters;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace Howest.MagicCards.Web.Components.Pages

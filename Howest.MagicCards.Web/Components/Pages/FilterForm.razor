@@ -1,6 +1,6 @@
 @inject IHttpClientFactory httpClientFactory
 
-<EditForm Model="@filter" OnValidSubmit="@GetFilteredCards" FormName="Filter">
+<EditForm Model="@filter" OnValidSubmit="@GetFilteredCards" FormName="FilterForm">
     <div class="form-group">
         <label for="Name">Name:</label>
         <InputText @bind-Value="filter.Name" id="Name" class="form-control"></InputText>
@@ -54,16 +54,6 @@
         <InputNumber id="PageNumber" @bind-Value="filter.PageNumber" class="form-control"></InputNumber>
     </div>
 
-    <button type="submit" @onsubmit:preventDefault>search</button>
+    <button type="submit">search</button>
     <p class="error">@message</p>
 </EditForm>
-
-@code {
-    [Parameter]
-    public EventCallback<CardFilter> OnFilterChanged { get; set; }
-
-    private async Task GetFilteredCards(EditContext context)
-    {
-        await OnFilterChanged.InvokeAsync(filter);
-    }
-}

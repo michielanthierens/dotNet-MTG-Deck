@@ -1,9 +1,5 @@
-﻿using Howest.MagicCards.DAL.Models;
-using Howest.MagicCards.Shared.DTO;
-using Howest.MagicCards.WebAPI.Wrappers;
+﻿using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text.Json;
 
 namespace Howest.MagicCards.Web.Components.Pages
 {
@@ -12,7 +8,6 @@ namespace Howest.MagicCards.Web.Components.Pages
         [Parameter]
         public IEnumerable<CardReadDTO> Cards { get; set; }
 
-        // below is in comments in partial class
         public string message { get; set; }
 
         public async Task AddCardToDeck(CardReadDTO card)

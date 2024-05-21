@@ -1,6 +1,4 @@
-@* temp import until dto is finished
- *@
-@using Howest.MagicCards.DAL.Models;
+@using Howest.MagicCards.DAL.Models
 @inject IHttpClientFactory httpClientFactory
 
 <div>
@@ -8,20 +6,25 @@
 
     <p class="error">@message</p>
     <div class="deck">
+
         @if (deckCards != null && deckCards.Any())
         {
             <div id="listOfDeckCards">
                 @foreach (DeckCard card in deckCards)
-                {                    
-                    <button onclick="(() => @removeCardFromDeck(card))"> - </button>
-                    <div class="deckName">@card.name</div>
-                    <div class="deckAmount">@card.amount</div>                    
+                {
+                    <div class="deckCardInstance">
+                        <button 
+                            @onclick="@(() => removeCardFromDeck(card))"
+                            @onclick:preventDefault> - </button>
+                        <div class="deckName">@card.name</div>
+                        <div class="deckAmount">@card.amount</div>
+                    </div>
                 }
-            </div>          
+            </div>
         }
         else
         {
-                <p>no cards in your deck yet...</p>
+            <p>no cards in your deck yet...</p>
         }
     </div>
 </div>
@@ -64,19 +67,31 @@
 
     public async Task removeCardFromDeck(DeckCard card)
     {
+        HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
+        var content = new StringContent(string.Empty);
 
+        HttpResponseMessage response = await httpClient.PutAsync($"remove?id={card.id}&name={card.name}", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await getDeck();
+        }
+        else
+        {
+            message = $"Error: {response.ReasonPhrase}";
+        }
     }
 
-    public async Task AddCardToDeck(DeckCard card)
+    public async Task AddCardToDeck(CardReadDTO card)
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
         var content = new StringContent(string.Empty);
 
-        HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.id}_{card.name}&name={card.name}", content);
+        HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.Number}_{card.Name}&name={card.Name}", content);
 
         if (response.IsSuccessStatusCode)
         {
-            getDeck();
+            await getDeck();
         }
         else
         {

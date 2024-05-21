@@ -120,15 +120,24 @@ div#deckCards {
     transition: transform 0.3s ease-in-out;
 }
 
-.cardImage img:hover {
-    transform: scale(1.05);
-}
 
 .cardImage {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+/*.cardInfo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border: 1px solid black;
+    padding: 10px;
+    z-index: 100;
+    width: 200px;*/ /* Adjust as needed */
+    /*box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}*/
 
 p {
     text-align: center;

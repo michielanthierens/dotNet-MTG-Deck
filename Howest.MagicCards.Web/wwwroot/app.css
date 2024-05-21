@@ -177,7 +177,19 @@ p {
     color: #333;
 }
 
+.deckName:hover {
+    cursor:pointer;
+}
+
 .deckAmount {
     font-size: 1em;
     color: #666;
+}
+
+.clearDeck {
+    background-color: #e50000;
+    margin-left: auto;
+    margin-right: 20px;
+    display: block;
+    text-align: right;
 }

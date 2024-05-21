@@ -13,10 +13,8 @@
                 @foreach (DeckCard card in deckCards)
                 {
                     <div class="deckCardInstance">
-                        <button 
-                            @onclick="@(() => removeCardFromDeck(card))"
-                            @onclick:preventDefault> - </button>
-                        <div class="deckName">@card.name</div>
+                        <button @onclick="()=>removeCardFromDeck(card)"> - </button>
+                        <div @onclick="()=>AddCardToDeck(card)" class="deckName">@card.name</div>
                         <div class="deckAmount">@card.amount</div>
                     </div>
                 }
@@ -27,6 +25,7 @@
             <p>no cards in your deck yet...</p>
         }
     </div>
+    <button @onclick="@ClearDeck" class="clearDeck">Clear deck</button>
 </div>
 
 @code {
@@ -65,7 +64,7 @@
         }
     }
 
-    public async Task removeCardFromDeck(DeckCard card)
+    async Task removeCardFromDeck(DeckCard card)
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
         var content = new StringContent(string.Empty);
@@ -82,7 +81,7 @@
         }
     }
 
-    public async Task AddCardToDeck(CardReadDTO card)
+    public async Task AddCardToDeckFromAllCards(CardReadDTO card)
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
         var content = new StringContent(string.Empty);
@@ -99,4 +98,37 @@
         }
     }
 
+    public async Task AddCardToDeck(DeckCard card)
+    {
+        HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
+        var content = new StringContent(string.Empty);
+
+        HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.id}_{card.name}&name={card.name}", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await getDeck();
+        }
+        else
+        {
+            message = $"Error: {response.ReasonPhrase}";
+        }
+    }
+
+    async Task ClearDeck()
+    {
+        HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
+        var content = new StringContent(string.Empty);
+
+        HttpResponseMessage response = await httpClient.DeleteAsync($"clear");
+
+        if (response.IsSuccessStatusCode)
+        {
+            await getDeck();
+        }
+        else
+        {
+            message = $"Error: {response.ReasonPhrase}";
+        }
+    }
 }

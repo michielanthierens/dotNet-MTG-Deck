@@ -27,7 +27,7 @@
             <p>no cards in your deck yet...</p>
         }
     </div>
-    <button @onclick="@ClearDeck" class="clearDeck">Clear deck</button>
+    <button @onclick="ClearDeck" class="clearDeck">Clear deck</button>
 </div>
 
 @code {
@@ -117,7 +117,7 @@
         }
     }
 
-    async Task ClearDeck()
+    private async Task ClearDeck()
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
         var content = new StringContent(string.Empty);

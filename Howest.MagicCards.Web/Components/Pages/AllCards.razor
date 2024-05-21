@@ -1,20 +1,25 @@
 @inject IHttpClientFactory httpClientFactory
+@using System.ComponentModel.DataAnnotations;
+@using System.Text.RegularExpressions;
 
-<div class="form">
-    <EditForm Model="@Filter" OnValidSubmit="LoadFilteredCards"  FormName="CardFilter">
-        <label for="">name: </label>
-        <InputText id="Name" @bind-Value="@Filter.Name" />
+
+<div class="filter">
+    <EditForm Model="@blazorFilter" OnValidSubmit="@LoadFilteredCards"  FormName="CardFilter" class="form">
+        <div class="form-group">
+            <label for="Name">name: </label>
+            <InputText id="Name" @bind-Value="@blazorFilter.Name" class="form-control" DisplayName="Name:"/> 
+        </div>
         <div class="form-group">
             <label for="SetId">SetId:</label>
-            <InputText id="SetId" @bind-Value="@Filter.SetId" class="form-control"></InputText>
+            <InputText id="SetId" @bind-Value="@blazorFilter.SetId" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="ArtistName">Artist:</label>
-            <InputText id="ArtistName" @bind-Value="@Filter.ArtistName" class="form-control"></InputText>
+            <InputText id="ArtistName" @bind-Value="@blazorFilter.ArtistName" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="RarityCode">Rarity:</label>
-            <InputSelect id="RarityCode" @bind-Value="@Filter.RarityCode" class="form-control">
+            <InputSelect id="RarityCode" @bind-Value="@blazorFilter.RarityCode" class="form-control">
                 @if (rarities != null && rarities.Any())
                 {
                     // <option value="@null"> - choose rarity - </option>
@@ -31,26 +36,26 @@
         </div>
         <div class="form-group">
             <label for="Type">Type:</label>
-            <InputText id="Type" @bind-Value="@Filter.Type" class="form-control"></InputText>
+            <InputText id="Type" @bind-Value="@blazorFilter.Type" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="Text">Text:</label>
-            <InputText id="Text" @bind-Value="@Filter.Text" class="form-control"></InputText>
+            <InputText id="Text" @bind-Value="@blazorFilter.Text" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="Sort">Sorting order:</label>
-            <InputSelect id="Sort" @bind-Value="@Filter.Sort" class="form-control">
+            <InputSelect id="Sort" @bind-Value="@blazorFilter.Sort" class="form-control">
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
             </InputSelect>
         </div>
         <div class="form-group">
             <label for="PageSize">Number of results:</label>
-            <InputNumber id="PageSize" @bind-Value="@Filter.PageSize" class="form-control"></InputNumber>
+            <InputNumber id="PageSize" @bind-Value="@blazorFilter.PageSize" class="form-control"></InputNumber>
         </div>
         <div class="form-group">
             <label for="PageNumber">Page:</label>
-            <InputNumber id="PageNumber" @bind-Value="@Filter.PageNumber" class="form-control"></InputNumber>
+            <InputNumber id="PageNumber" @bind-Value="@blazorFilter.PageNumber" class="form-control"></InputNumber>
         </div>
 
         <button type="submit">Search</button>
@@ -70,7 +75,13 @@
 </div>
 
 @code {
-    BlazorFilter Filter = new();
+    BlazorFilter blazorFilter = new();
+
+    public void HandlePerson(EditContext context)
+    {
+        context.Model.ToString();
+    }
+
     private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
     private IEnumerable<CardReadDTO> filteredCards { get; set; }
     private string message { get; set; }
@@ -87,7 +98,8 @@
     protected override async Task OnInitializedAsync()
     {
         getRarities();
-        await LoadFilteredCards();
+
+        await LoadFilteredCards();        
     }
 
     private async Task LoadFilteredCards()
@@ -97,35 +109,43 @@
 
         var queryParams = new Dictionary<string, string>();
 
-        Filter.PageSize = 2;
-        Filter.PageNumber = 3;
-        Filter.RarityCode = "C";
-        Filter.Sort = "desc";
-
-        if (!string.IsNullOrEmpty(Filter.Name))
-            queryParams.Add("Name", Filter.Name);
-        if (!string.IsNullOrEmpty(Filter.SetId))
-            queryParams.Add("SetId", Filter.SetId);
-        if (!string.IsNullOrEmpty(Filter.ArtistName))
-            queryParams.Add("ArtistName", Filter.ArtistName);
-        if (!string.IsNullOrEmpty(Filter.RarityCode))
-            queryParams.Add("RarityCode", Filter.RarityCode);
-        if (!string.IsNullOrEmpty(Filter.Type))
-            queryParams.Add("Type", Filter.Type);
-        if (!string.IsNullOrEmpty(Filter.Text))
-            queryParams.Add("Text", Filter.Text);
-        if (Filter.PageNumber > 0)
-            queryParams.Add("PageNumber", Filter.PageNumber.ToString());
-        if (Filter.PageSize > 0)
-            queryParams.Add("PageSize", Filter.PageSize.ToString());
-        if (!string.IsNullOrEmpty(Filter.Sort))
-            queryParams.Add("Sort", Filter.Sort);
-        if (string.IsNullOrEmpty(Filter.Sort))
+        if (!string.IsNullOrEmpty(blazorFilter.Name))
+            queryParams.Add("Name", blazorFilter.Name);
+        if (!string.IsNullOrEmpty(blazorFilter.SetId))
+            queryParams.Add("SetId", blazorFilter.SetId);
+        if (!string.IsNullOrEmpty(blazorFilter.ArtistName))
+            queryParams.Add("ArtistName", blazorFilter.ArtistName);
+        if (!string.IsNullOrEmpty(blazorFilter.RarityCode))
+            queryParams.Add("RarityCode", blazorFilter.RarityCode);
+        if (!string.IsNullOrEmpty(blazorFilter.Type))
+            queryParams.Add("Type", blazorFilter.Type);
+        if (!string.IsNullOrEmpty(blazorFilter.Text))
+            queryParams.Add("Text", blazorFilter.Text);
+        if (blazorFilter.PageNumber > 0)
+            queryParams.Add("PageNumber", blazorFilter.PageNumber.ToString());
+        if (blazorFilter.PageSize > 0)
+            queryParams.Add("PageSize", blazorFilter.PageSize.ToString());
+        if (!string.IsNullOrEmpty(blazorFilter.Sort))
+            queryParams.Add("Sort", blazorFilter.Sort);
+        if (string.IsNullOrEmpty(blazorFilter.Sort))
             queryParams.Add("Sort", "asc");
 
         string url = QueryHelpers.AddQueryString("Cards", queryParams);
 
         HttpResponseMessage response = await httpClient.GetAsync(url);
+
+
+        // HttpResponseMessage response = await httpClient.GetAsync($"Cards?" +
+        // $"Name={blazorFilter.Name}&" +
+        // $"SetId={blazorFilter.SetId}&" +
+        // $"ArtistName={blazorFilter.ArtistName}$" +
+        // $"RarityCode={blazorFilter.RarityCode}&" +
+        // $"Type={blazorFilter.Type}&" +
+        // $"Text={blazorFilter.Text}&" +
+        // $"PageNumber={blazorFilter.PageNumber}&" +
+        // $"PageSize={blazorFilter.PageSize}&" +
+        // $"Sort={blazorFilter.Sort}"
+        // );
 
         string apiResponse = await response.Content.ReadAsStringAsync();
 

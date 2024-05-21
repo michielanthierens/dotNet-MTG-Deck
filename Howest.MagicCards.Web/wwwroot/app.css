@@ -1,5 +1,6 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: lightblue
 }
 
 a, .btn-link {
@@ -42,10 +43,89 @@ h1:focus {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
+}
+
+h1, h2 {
+    text-align: center;
+    display: block;
+}
+
+div#body {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+div#allCards {
+    width: 60%;
+}
+
+div#deckCards {
+    border: 5px solid;
+    width: 39%;
+}
+
+.form {
+    background-color: steelblue;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    padding-bottom: 0;
+    border-radius: 5px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group button {
+    padding: 0.5rem;
+    font-size: 1em;
+}
+
+.error {
+    color: red;
+    grid-column: span 3;
+    text-align: center;
+}
+
+.allCards {
+    margin-top: 0.25rem;
+}
+
+/* Card images styling */
+.allImages {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.cardImage img {
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.cardImage img:hover {
+    transform: scale(1.05);
+}
+
+.cardImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

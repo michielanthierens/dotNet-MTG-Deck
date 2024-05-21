@@ -2,14 +2,16 @@
 @using Howest.MagicCards.WebAPI.Wrappers
 @inject IHttpClientFactory httpClientFactory
 
-<h1>all cards:</h1>
+<h2>all cards:</h2>
 <p class="error">@message</p>
-@foreach (CardReadDTO card in Cards) 
-{
-    <div class="cardImage">
-        <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.Number"
-             @onclick:preventDefault="true"
-             @onclick="@(() => AddCardToDeck(card))"
-         />
-    </div>
-}
+<div class="allImages">
+    @foreach (CardReadDTO card in Cards)
+    {
+        <div class="cardImage">
+            <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.Number"
+                 @onclick:preventDefault="true"
+                 @onclick="@(() => AddCardToDeck(card))" />
+        </div>
+    }
+</div>
+

@@ -1,6 +1,7 @@
 ﻿using Howest.MagicCards.Shared.DTO;
 using Microsoft.AspNetCore.Components;
 
+
 namespace Howest.MagicCards.Web.Components.Pages
 {
     public partial class FilteredCardsList
@@ -19,7 +20,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                // todo refresh deck
+                // reset deck.
             }
             else
             {

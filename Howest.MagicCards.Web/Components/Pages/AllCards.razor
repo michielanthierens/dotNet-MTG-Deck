@@ -2,21 +2,19 @@
 
 <div class="form">
     <EditForm Model="@Filter" OnValidSubmit="LoadFilteredCards"  FormName="CardFilter">
-        <div class="form-group">
-            <label for="Name">Name:</label>
-            <InputText @bind-Value="Filter.Name" id="Name" class="form-control"></InputText>
-        </div>
+        <label for="">name: </label>
+        <InputText id="Name" @bind-Value="@Filter.Name" />
         <div class="form-group">
             <label for="SetId">SetId:</label>
-            <InputText id="SetId" @bind-Value="Filter.SetId" class="form-control"></InputText>
+            <InputText id="SetId" @bind-Value="@Filter.SetId" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="ArtistName">Artist:</label>
-            <InputText id="ArtistName" @bind-Value="Filter.ArtistName" class="form-control"></InputText>
+            <InputText id="ArtistName" @bind-Value="@Filter.ArtistName" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="RarityCode">Rarity:</label>
-            <InputSelect id="RarityCode" @bind-Value="Filter.RarityCode" class="form-control">
+            <InputSelect id="RarityCode" @bind-Value="@Filter.RarityCode" class="form-control">
                 @if (rarities != null && rarities.Any())
                 {
                     // <option value="@null"> - choose rarity - </option>
@@ -33,26 +31,26 @@
         </div>
         <div class="form-group">
             <label for="Type">Type:</label>
-            <InputText id="Type" @bind-Value="Filter.Type" class="form-control"></InputText>
+            <InputText id="Type" @bind-Value="@Filter.Type" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="Text">Text:</label>
-            <InputText id="Text" @bind-Value="Filter.Text" class="form-control"></InputText>
+            <InputText id="Text" @bind-Value="@Filter.Text" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="Sort">Sorting order:</label>
-            <InputSelect id="Sort" @bind-Value="Filter.Sort" class="form-control">
+            <InputSelect id="Sort" @bind-Value="@Filter.Sort" class="form-control">
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
             </InputSelect>
         </div>
         <div class="form-group">
             <label for="PageSize">Number of results:</label>
-            <InputNumber id="PageSize" @bind-Value="Filter.PageSize" class="form-control"></InputNumber>
+            <InputNumber id="PageSize" @bind-Value="@Filter.PageSize" class="form-control"></InputNumber>
         </div>
         <div class="form-group">
             <label for="PageNumber">Page:</label>
-            <InputNumber id="PageNumber" @bind-Value="Filter.PageNumber" class="form-control"></InputNumber>
+            <InputNumber id="PageNumber" @bind-Value="@Filter.PageNumber" class="form-control"></InputNumber>
         </div>
 
         <button type="submit">Search</button>
@@ -72,7 +70,7 @@
 </div>
 
 @code {
-    private CardFilter Filter { get; set; } = new CardFilter();
+    BlazorFilter Filter = new();
     private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
     private IEnumerable<CardReadDTO> filteredCards { get; set; }
     private string message { get; set; }
@@ -99,6 +97,11 @@
 
         var queryParams = new Dictionary<string, string>();
 
+        Filter.PageSize = 2;
+        Filter.PageNumber = 3;
+        Filter.RarityCode = "C";
+        Filter.Sort = "desc";
+
         if (!string.IsNullOrEmpty(Filter.Name))
             queryParams.Add("Name", Filter.Name);
         if (!string.IsNullOrEmpty(Filter.SetId))
@@ -117,6 +120,8 @@
             queryParams.Add("PageSize", Filter.PageSize.ToString());
         if (!string.IsNullOrEmpty(Filter.Sort))
             queryParams.Add("Sort", Filter.Sort);
+        if (string.IsNullOrEmpty(Filter.Sort))
+            queryParams.Add("Sort", "asc");
 
         string url = QueryHelpers.AddQueryString("Cards", queryParams);
 

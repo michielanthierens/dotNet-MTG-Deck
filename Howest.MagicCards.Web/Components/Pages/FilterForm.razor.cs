@@ -9,8 +9,7 @@ namespace Howest.MagicCards.Web.Components.Pages
     {
         [Parameter]
         public string FormName { get; set; }
-        [Parameter]
-        public EventCallback<CardFilter> OnFilterChanged { get; set; }
+
         private CardFilter filter { get; set; } = new();
         private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
         private string message { get; set; }
@@ -23,10 +22,7 @@ namespace Howest.MagicCards.Web.Components.Pages
                 PropertyNameCaseInsensitive = true,
             };
         }
-        private async Task GetFilteredCards()
-        {
-            await OnFilterChanged.InvokeAsync(filter);
-        }
+
 
         protected override async Task OnInitializedAsync()
         {

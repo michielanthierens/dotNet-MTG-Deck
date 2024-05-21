@@ -9,5 +9,5 @@ public class CardFilter : PaginationFilter
     public string? Text { get; set; } = default;
     
     // added later
-    public string? Sort { get; set; } = default;
+    public string? Sort { get; set; } = "asc";
 }

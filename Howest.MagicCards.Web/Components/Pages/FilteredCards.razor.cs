@@ -26,7 +26,17 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
         }
 
+        protected override async Task OnParametersSetAsync()
+        {
+            await LoadFilteredCards();
+        }
+
         protected override async Task OnInitializedAsync()
+        {
+            await LoadFilteredCards();
+        }
+
+        private async Task LoadFilteredCards()
         {
             HttpClient httpClient = httpClientFactory.CreateClient("WebAPI");
             httpClient.DefaultRequestHeaders.Add("api-version", "1.5");
@@ -49,8 +59,9 @@ namespace Howest.MagicCards.Web.Components.Pages
                 queryParams.Add("PageNumber", Filter.PageNumber.ToString());
             if (!string.IsNullOrEmpty(Filter.PageSize.ToString()))
                 queryParams.Add("PageSize", Filter.PageSize.ToString());
+            if (!string.IsNullOrEmpty(Filter.Sort))
+                queryParams.Add("sort", Filter.Sort);
 
-            queryParams.Add("sort", Filter.Sort);
 
             string url = QueryHelpers.AddQueryString("Cards", queryParams);
 

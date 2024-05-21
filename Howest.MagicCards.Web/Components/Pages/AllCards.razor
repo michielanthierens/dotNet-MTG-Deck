@@ -72,16 +72,12 @@
     else
     {
         <FilteredCardsList Cards="@filteredCards"></FilteredCardsList>
+
     }
 </div>
 
 @code {
     BlazorFilter blazorFilter = new();
-
-    public void HandlePerson(EditContext context)
-    {
-        context.Model.ToString();
-    }
 
     private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
     private IEnumerable<CardReadDTO> filteredCards { get; set; }
@@ -134,19 +130,6 @@
         string url = QueryHelpers.AddQueryString("Cards", queryParams);
 
         HttpResponseMessage response = await httpClient.GetAsync(url);
-
-
-        // HttpResponseMessage response = await httpClient.GetAsync($"Cards?" +
-        // $"Name={blazorFilter.Name}&" +
-        // $"SetId={blazorFilter.SetId}&" +
-        // $"ArtistName={blazorFilter.ArtistName}$" +
-        // $"RarityCode={blazorFilter.RarityCode}&" +
-        // $"Type={blazorFilter.Type}&" +
-        // $"Text={blazorFilter.Text}&" +
-        // $"PageNumber={blazorFilter.PageNumber}&" +
-        // $"PageSize={blazorFilter.PageSize}&" +
-        // $"Sort={blazorFilter.Sort}"
-        // );
 
         string apiResponse = await response.Content.ReadAsStringAsync();
 

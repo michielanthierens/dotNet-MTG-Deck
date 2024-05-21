@@ -20,7 +20,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                // reset deck.
+                // todo refresh deck
             }
             else
             {

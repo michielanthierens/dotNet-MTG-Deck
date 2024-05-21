@@ -48,7 +48,7 @@
         await getDeck();
     }
 
-    private async Task getDeck()
+    public async Task getDeck()
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
 

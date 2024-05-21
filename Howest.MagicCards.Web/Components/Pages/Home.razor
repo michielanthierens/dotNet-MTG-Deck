@@ -1,28 +1,13 @@
 ﻿@page "/"
-@inject IHttpClientFactory httpClientFactory
 
 <PageTitle>MTG Deck Builder</PageTitle>
 
 <h1>MTG Deck Builder</h1>
 
 <div id="allCards">
-    <FilterForm OnFilterChanged="HandleFilterChanged" FormName="filterForm" filter="filter"/>
-    if ()
-    <FilteredCards Filter="filter" />
-    <FilteredCards Filter="test"/>
+    <AllCards/>
 </div>
 
 <div id="deckCards">
     <DeckCards />
 </div>
-
-@code {
-    private CardFilter filter { get; init; } = new CardFilter();
-    private CardFilter test { get; set; } = new CardFilter();
-    private async Task HandleFilterChanged(CardFilter newFilter)
-    {
-        // filter = newFilter;
-        test = newFilter;
-        await InvokeAsync(StateHasChanged);
-    }
-}

@@ -16,8 +16,8 @@ public partial class FilterForm
 
     [Parameter]
     public CardFilter filter { get; set; }
-    private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
-    private string message { get; set; }
+    private IEnumerable<RarityDTO> Rarities { get; set; } = new List<RarityDTO>();
+    private string Message { get; set; }
     private JsonSerializerOptions JsonOptions { get; }
 
     public FilterForm()
@@ -29,7 +29,6 @@ public partial class FilterForm
     }
     private async Task GetFilteredCards(EditContext context)
     {
-        Console.WriteLine(filter);
         await OnFilterChanged.InvokeAsync(filter);
     }
     protected override async Task OnInitializedAsync()
@@ -43,12 +42,12 @@ public partial class FilterForm
 
         if (response.IsSuccessStatusCode)
         {
-            rarities = JsonSerializer.Deserialize<IEnumerable<RarityDTO>>(apiResponse, JsonOptions);
+            Rarities = JsonSerializer.Deserialize<IEnumerable<RarityDTO>>(apiResponse, JsonOptions);
         }
         else
         {
-            rarities = new List<RarityDTO>();
-            message = $"Error: {response.ReasonPhrase}";
+            Rarities = new List<RarityDTO>();
+            Message = $"Error: {response.ReasonPhrase}";
         }
     }
 }

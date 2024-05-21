@@ -16,9 +16,9 @@
     <div class="form-group">
         <label for="RarityCode">Rarity:</label>
         <InputSelect id="RarityCode" @bind-Value="filter.RarityCode" class="form-control">
-            @if (rarities != null && rarities.Any())
+            @if (Rarities != null && Rarities.Any())
             {
-                @foreach (RarityDTO rarity in rarities)
+                @foreach (RarityDTO rarity in Rarities)
                 {
                     <option value="@rarity.RarityCode">@rarity.Rarity</option>
                 }
@@ -55,5 +55,5 @@
     </div>
 
     <button type="submit">search</button>
-    <p class="error">@message</p>
+    <p class="error">@Message</p>
 </EditForm>

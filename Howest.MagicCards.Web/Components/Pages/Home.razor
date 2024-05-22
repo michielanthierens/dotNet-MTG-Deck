@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using Howest.MagicCards.DAL.Models;
+@inject IHttpClientFactory httpClientFactory
+
 
 <PageTitle>MTG Deck Builder</PageTitle>
 
@@ -10,6 +13,43 @@
     </div>
 
     <div id="deckCards">
-        <DeckCards />
+        <DeckCards deckCards="@deckCards" message="@message"/>
     </div>
 </div>
+
+
+@code {
+    private IEnumerable<DeckCard> deckCards { get; set; }
+    private JsonSerializerOptions JsonOptions { get; }
+    private string message;
+
+    public Home() {
+    JsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+    }
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    public async Task getDeck()
+    {
+        HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
+
+        HttpResponseMessage response = await httpClient.GetAsync("");
+
+        string apiResponse = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            deckCards = JsonSerializer.Deserialize<IEnumerable<DeckCard>>(apiResponse, JsonOptions);
+        }
+        else
+        {
+            message = $"Error: {response.ReasonPhrase}";
+        }
+    }
+}

@@ -61,6 +61,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             if (response.IsSuccessStatusCode)
             {
                 // todo refresh deck
+                StateHasChanged();
             }
             else
             {

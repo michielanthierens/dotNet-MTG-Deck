@@ -39,14 +39,14 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_1
         {
             filter.MaxPageSize = options.Value.MaxPageSize;
 
-            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.SetId}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}";
+            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}";
 
             try
             {
                 if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
                 {
                     cachedResult = await _cardRepo.getAllCards()
-                                .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                 .ToPagedList(filter.PageNumber, filter.PageSize)
                                 .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
                                 .ToListAsync();
@@ -67,7 +67,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_1
                 {
                     TotalRecords = _cardRepo
                                         .getAllCards()
-                                        .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                        .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                         .Count()
                 });
             }
@@ -113,14 +113,14 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
         {
             filter.MaxPageSize = options.Value.MaxPageSize;
 
-            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.SetId}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}_{sort}";
+            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}_{sort}";
 
             try
             {
                 if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
                 {
                     cachedResult = await _cardRepo.getAllCards()
-                                .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                 .SortOnCardName(sort)
                                 .ToPagedList(filter.PageNumber, filter.PageSize)
                                 .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
@@ -142,7 +142,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
                 {
                     TotalRecords = _cardRepo
                                         .getAllCards()
-                                        .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                        .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                         .Count()
                 });
             }
@@ -158,13 +158,12 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
             }
         }
 
-        [HttpGet("{id:int}", Name = "getCardDetail")]
+        [HttpGet("{id}", Name = "getCardDetail")]
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 200)]
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 404)]
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
-        public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(int id)
+        public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(string id)
         {
-
             string _key = $"CardDetail-{id}";
 
             try
@@ -177,7 +176,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
                 {
                     return NotFound($"No book found with id {id}");
                 }
-
+                
                 CardReadDetailDTO foundCard = _mapper.Map<CardReadDetailDTO>(card);
 
                 MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
@@ -187,7 +186,45 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
                 _cache.Set(_key, foundCard, cacheOptions);
 
-                return Ok(new Response<CardReadDetailDTO>(foundCard));
+                return Ok(value: new Response<CardReadDetailDTO>(foundCard));
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response<CardReadDTO>()
+                    {
+                        Succeeded = false,
+                        Errors = [$"Status code: {StatusCodes.Status500InternalServerError}"],
+                        Message = $"({ex.Message})"
+                    });
+            }
+        }
+
+        [HttpGet("rarities", Name = "getRarities")]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 200)]
+        [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
+        public async Task<ActionResult<Response<IEnumerable<RarityDTO>>>> GetRariries()
+        {
+            string _key = $"All-Rarities";
+
+            try
+            {
+                if (!_cache.TryGetValue(_key, out IEnumerable<RarityDTO> cachedResult))
+                {
+                    cachedResult = await _cardRepo.GetRarities()                                
+                                .ProjectTo<RarityDTO>(_mapper.ConfigurationProvider)
+                                .ToListAsync();
+
+                    MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                    };
+
+                    _cache.Set(_key, cachedResult, cacheOptions);
+                }
+
+                return Ok(cachedResult);
 
             }
             catch (Exception ex)

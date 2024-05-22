@@ -2,7 +2,7 @@
 
 namespace Howest.MagicCards.Shared.DTO
 {
-    public class ArtistReadDTO
+    public record ArtistReadDTO
     {
         public string FullName { get; set; }
 

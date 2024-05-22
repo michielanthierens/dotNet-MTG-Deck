@@ -23,7 +23,7 @@
             <InputSelect id="RarityCode" @bind-Value="@blazorFilter.RarityCode" class="form-control">
                 @if (rarities != null && rarities.Any())
                 {
-                    // <option value="@null"> - choose rarity - </option>
+                    <option value="">all</option>
                     @foreach (RarityDTO rarity in rarities)
                     {
                         <option value="@rarity.RarityCode">@rarity.Rarity</option>

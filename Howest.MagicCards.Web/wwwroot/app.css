@@ -106,7 +106,6 @@ div#deckCards {
     margin-top: 0.25rem;
 }
 
-/* Card images styling */
 .allImages {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -114,18 +113,17 @@ div#deckCards {
 }
 
 .cardImage {
-    position: relative; /* Ensure the cardInfo is positioned relative to the cardImage */
+    position: relative; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-    .cardImage img {
-        width: 100%;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: transform 0.3s ease-in-out;
-    }
+.cardImage img {
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 .cardInfo {
     position: absolute;
@@ -135,24 +133,25 @@ div#deckCards {
     border: 1px solid black;
     padding: 10px;
     z-index: 100;
-    width: 100%; /* Ensure the info box is not wider than the image */
+    width: 100%;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    transform: translateY(-10px);
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 .cardImage:hover .cardInfo {
-    opacity: 1;
-    transform: translateY(0);
-}
 
+    opacity: 0.9;
+    transform: translateY(0);
 }
 
 .deck {
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;
+}
+
+.deck p {
+    text-align: center;
 }
 
 #listOfDeckCards {

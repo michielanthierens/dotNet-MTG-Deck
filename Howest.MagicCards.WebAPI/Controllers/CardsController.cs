@@ -176,7 +176,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
                 {
                     return NotFound($"No book found with id {id}");
                 }
-
+                
                 CardReadDetailDTO foundCard = _mapper.Map<CardReadDetailDTO>(card);
 
                 MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()

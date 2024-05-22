@@ -11,8 +11,8 @@
             <InputText id="Name" @bind-Value="@blazorFilter.Name" class="form-control" DisplayName="Name:"/> 
         </div>
         <div class="form-group">
-            <label for="SetId">SetId:</label>
-            <InputText id="SetId" @bind-Value="@blazorFilter.SetId" class="form-control"></InputText>
+            <label for="Set">Set:</label>
+            <InputText id="Set" @bind-Value="@blazorFilter.Set" class="form-control"></InputText>
         </div>
         <div class="form-group">
             <label for="ArtistName">Artist:</label>
@@ -108,8 +108,8 @@
 
         if (!string.IsNullOrEmpty(blazorFilter.Name))
             queryParams.Add("Name", blazorFilter.Name);
-        if (!string.IsNullOrEmpty(blazorFilter.SetId))
-            queryParams.Add("SetId", blazorFilter.SetId);
+        if (!string.IsNullOrEmpty(blazorFilter.Set))
+            queryParams.Add("Set", blazorFilter.Set);
         if (!string.IsNullOrEmpty(blazorFilter.ArtistName))
             queryParams.Add("ArtistName", blazorFilter.ArtistName);
         if (!string.IsNullOrEmpty(blazorFilter.RarityCode))

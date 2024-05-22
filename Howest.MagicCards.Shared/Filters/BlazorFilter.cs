@@ -9,7 +9,7 @@ namespace Howest.MagicCards.Shared.Filters
     public class BlazorFilter
     {
         public string? Name { get; set; }
-        public string? SetId { get; set; }
+        public string? Set { get; set; }
         public string? ArtistName { get; set; }
         public string? RarityCode { get; set; }
         public string? Type { get; set; }

@@ -39,14 +39,14 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_1
         {
             filter.MaxPageSize = options.Value.MaxPageSize;
 
-            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.SetId}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}";
+            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}";
 
             try
             {
                 if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
                 {
                     cachedResult = await _cardRepo.getAllCards()
-                                .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                 .ToPagedList(filter.PageNumber, filter.PageSize)
                                 .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
                                 .ToListAsync();
@@ -67,7 +67,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_1
                 {
                     TotalRecords = _cardRepo
                                         .getAllCards()
-                                        .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                        .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                         .Count()
                 });
             }
@@ -113,14 +113,14 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
         {
             filter.MaxPageSize = options.Value.MaxPageSize;
 
-            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.SetId}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}_{sort}";
+            string _key = $"CardsKey-{filter.MaxPageSize}_{filter.PageSize}_{filter.PageNumber}_{filter.Name}_{filter.Set}_{filter.ArtistName}_{filter.RarityCode}_{filter.Type}_{filter.Text}_{sort}";
 
             try
             {
                 if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
                 {
                     cachedResult = await _cardRepo.getAllCards()
-                                .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                 .SortOnCardName(sort)
                                 .ToPagedList(filter.PageNumber, filter.PageSize)
                                 .ProjectTo<CardReadDTO>(_mapper.ConfigurationProvider)
@@ -142,7 +142,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
                 {
                     TotalRecords = _cardRepo
                                         .getAllCards()
-                                        .ToFilteredList(filter.Name, filter.SetId, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
+                                        .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
                                         .Count()
                 });
             }

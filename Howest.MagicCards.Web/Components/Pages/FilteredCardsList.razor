@@ -8,11 +8,14 @@
 <div class="allImages">
     @foreach (CardReadDTO card in Cards)
     {
-        <div class="cardImage" @onmouseover="() => ShowCardInfo(card.MtgId)" @onmouseout="HideCardInfo">
+        <div class="cardImage" @onmouseover="() => ShowCardInfo(card.MtgId)" @onmouseout="HideCardInfo" @onclick:preventDefault="true"
+             @onclick="@(() => AddCardToDeck(card))">
             @if (_hoveredCard?.MtgId == card.MtgId)
             {
                 <div class="cardInfo">
                     <p><strong>Card Name:</strong> @_hoveredCard.CardName</p>
+                    <p><strong>Set:</strong> @_hoveredCard.Set</p>
+                    <p><strong>Rarity:</strong> @_hoveredCard.Rarity</p>
                     <p><strong>Power:</strong> @_hoveredCard.Power</p>
                     <p><strong>Converted Mana Cost:</strong> @_hoveredCard.ConvertedManaCost</p>
                     <p><strong>Toughness:</strong> @_hoveredCard.Toughness</p>
@@ -22,9 +25,7 @@
             }
             else
             {
-                <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.MtgId"
-                     @onclick:preventDefault="true"
-                     @onclick="@(() => AddCardToDeck(card))" />
+                <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.MtgId"/>
             }
         </div>
     }

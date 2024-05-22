@@ -5,7 +5,7 @@ namespace Howest.MagicCards.Shared.Extensions;
 
 public static class CardExtensions
 {
-    public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, string? name, string? setId, string? artistName, string? rarityCode, string? type, string? text)
+    public static IQueryable<Card> ToFilteredList(this IQueryable<Card> cards, string? name, string? set, string? artistName, string? rarityCode, string? type, string? text)
     {
         IQueryable<Card> filteredCards = cards;
 
@@ -14,9 +14,9 @@ public static class CardExtensions
             filteredCards = filteredCards.Where(card => card.Name.Contains(name));
         }
 
-        if (setId != null)
+        if (set != null)
         {
-            filteredCards = filteredCards.Where(card => card.SetCode.Equals(setId));
+            filteredCards = filteredCards.Where(card => card.SetCodeNavigation.Name.Contains(set));
         }
 
         if (artistName != null)
@@ -39,6 +39,8 @@ public static class CardExtensions
         {
             filteredCards = filteredCards.Where(card => card.Text.Contains(text));
         }
+
+        filteredCards = filteredCards.Where(card => card.OriginalImageUrl != null);
 
         return filteredCards;
     }

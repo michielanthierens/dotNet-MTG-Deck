@@ -1,0 +1,34 @@
+@using Amazon.Runtime
+@using Howest.MagicCards.WebAPI.Wrappers
+@inject IHttpClientFactory httpClientFactory
+@rendermode InteractiveServer
+
+<h2>all cards:</h2>
+<p class="error">@message</p>
+<div class="allImages">
+    @foreach (CardReadDTO card in Cards)
+    {
+        <div class="cardImage" 
+            @onclick:preventDefault="true"
+            @onclick="@(() => AddCardToDeck(card))"
+            @onmouseover="() => ShowCardInfo(card.MtgId)" 
+            @onmouseout="HideCardInfo"
+             >
+
+            <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.MtgId"   />
+
+            @if (_hoveredCard?.MtgId == card.MtgId)
+            {
+                <div class="cardInfo">
+                    <p><strong>Card Name:</strong> @_hoveredCard.CardName</p>
+                    <p><strong>Power:</strong> @_hoveredCard.Power</p>
+                    <p><strong>Converted Mana Cost:</strong> @_hoveredCard.ConvertedManaCost</p>
+                    <p><strong>Toughness:</strong> @_hoveredCard.Toughness</p>
+                    <p><strong>Type:</strong> @_hoveredCard.Type</p>
+                    <p><strong>Text:</strong> @_hoveredCard.Text</p>
+                </div>
+            }
+            
+        </div>
+    }
+</div>

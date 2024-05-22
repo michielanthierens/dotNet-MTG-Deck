@@ -15,7 +15,7 @@ namespace Howest.MagicCards.Shared.Filters
         public string? Type { get; set; }
         public string? Text { get; set; }
         public string? Sort { get; set; } = "asc";
-        public int? PageSize { get; set; } = 10;
+        public int? PageSize { get; set; } = 150;
         public int? PageNumber { get; set; } = 1;
     }
 }

@@ -190,13 +190,16 @@ div#deckCards {
     color: #333;
 }
 
-.deckName:hover {
-    cursor:pointer;
-}
-
 .deckAmount {
     font-size: 1em;
     color: #666;
+    width: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+.deckAmount:hover {
+    background-color: lawngreen;
 }
 
 .clearDeck {

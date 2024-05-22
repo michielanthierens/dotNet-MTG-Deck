@@ -16,8 +16,8 @@
                 {
                     <div class="deckCardInstance">
                         <button @onclick="()=>removeCardFromDeck(card)"> - </button>
-                        <div @onclick="()=>AddCardToDeck(card)" class="deckName">@card.name</div>
-                        <div class="deckAmount">@card.amount</div>
+                        <div class="deckName">@card.name</div>
+                        <div @onclick="()=>AddCardToDeck(card)" class="deckAmount">@card.amount</div>
                     </div>
                 }
             </div>
@@ -105,7 +105,7 @@
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
         var content = new StringContent(string.Empty);
 
-        HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.id}_{card.name}&name={card.name}", content);
+        HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.id}&name={card.name}", content);
 
         if (response.IsSuccessStatusCode)
         {

@@ -7,7 +7,7 @@
 <div class="filter">
     <EditForm Model="@blazorFilter" OnValidSubmit="@LoadFilteredCards"  FormName="CardFilter" class="form">
         <div class="form-group">
-            <label for="Name">name: </label>
+            <label for="Name">Name: </label>
             <InputText id="Name" @bind-Value="@blazorFilter.Name" class="form-control" DisplayName="Name:"/> 
         </div>
         <div class="form-group">

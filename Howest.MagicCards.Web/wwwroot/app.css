@@ -113,37 +113,42 @@ div#deckCards {
     gap: 20px;
 }
 
-.cardImage img {
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-
 .cardImage {
+    position: relative; /* Ensure the cardInfo is positioned relative to the cardImage */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+    .cardImage img {
+        width: 100%;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+    }
+
 .cardInfo {
     position: absolute;
     top: 0;
     left: 0;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9);
     border: 1px solid black;
     padding: 10px;
     z-index: 100;
-    width: 200px;
+    width: 100%; /* Ensure the info box is not wider than the image */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-p {
-    text-align: center;
+.cardImage:hover .cardInfo {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Container for the deck section */
+}
+
 .deck {
     padding: 20px;
     border-radius: 5px;

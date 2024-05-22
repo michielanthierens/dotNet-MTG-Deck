@@ -19,9 +19,9 @@ public class SqlCardRepository : ICardRepository
         return AllCards;
     }
 
-    public async Task<Card> GetCardbyId(int id)
+    public async Task<Card> GetCardbyId(string id)
     {
-        Card foundCard = await _db.Cards.SingleOrDefaultAsync(c => c.Id == id);
+        Card foundCard = await _db.Cards.SingleOrDefaultAsync(c => c.MtgId == id);
 
         return foundCard;
     }

@@ -30,6 +30,8 @@ public class CardReadDetailDTO
 
     public string OriginalType { get; set; }
 
+    public string MtgId { get; set; }
+
     public virtual IEnumerable<string> CardColors { get; set; } = new List<string>();
 
     public virtual ICollection<string> CardTypes { get; set; } = new List<string>();

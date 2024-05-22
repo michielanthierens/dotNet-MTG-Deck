@@ -8,11 +8,10 @@ namespace Howest.MagicCards.Shared.DTO
 {
     public class CardReadDTO
     {
-        public string Number { get; set; }
+        public string MtgId { get; set; }
 
         public string Name { get; set; }
 
-        // use image for blazor application
         public string OriginalImageUrl { get; set; }
 
     }

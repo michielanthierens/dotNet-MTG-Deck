@@ -56,7 +56,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
             var content = new StringContent(string.Empty);
 
-            HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.Number}_{card.Name}&name={card.Name}", content);
+            HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.MtgId}&name={card.Name}", content);
 
             if (response.IsSuccessStatusCode)
             {

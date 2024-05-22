@@ -158,11 +158,11 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
             }
         }
 
-        [HttpGet("{id:int}", Name = "getCardDetail")]
+        [HttpGet("{id}", Name = "getCardDetail")]
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 200)]
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 404)]
         [ProducesResponseType(typeof(Response<CardReadDetailDTO>), 500)]
-        public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(int id)
+        public async Task<ActionResult<Response<CardReadDetailDTO>>> GetCardDetail(string id)
         {
             string _key = $"CardDetail-{id}";
 

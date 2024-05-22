@@ -18,7 +18,7 @@ public class CardsProfile : Profile
             .ForMember(dto => dto.CardTypes, opt => opt.MapFrom(p => p.CardTypes.Select(ct => ct.Type.Name)));
 
         CreateMap<Card, CardReadDTO>()
-            .ForMember(dto => dto.Number, opt => opt.MapFrom(opt => opt.Number))
+            .ForMember(dto => dto.MtgId, opt => opt.MapFrom(opt => opt.MtgId))
             .ForMember(dto => dto.OriginalImageUrl, opt => opt.MapFrom(opt => opt.OriginalImageUrl));
 
         CreateMap<Rarity, RarityDTO>()

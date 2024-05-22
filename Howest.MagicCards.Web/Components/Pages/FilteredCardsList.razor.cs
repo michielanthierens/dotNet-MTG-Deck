@@ -1,4 +1,5 @@
 ﻿using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Components;
 using System.Text.Json;
 
@@ -9,9 +10,18 @@ namespace Howest.MagicCards.Web.Components.Pages
     {
         [Parameter]
         public IEnumerable<CardReadDTO> Cards { get; set; }
-        private CardReadDetailDTO _hoveredCard;
-
+        private CardReadDetailDTO _hoveredCard = new ();
         public string message { get; set; }
+
+        private JsonSerializerOptions JsonOptions { get; }
+
+        public FilteredCardsList()
+        {
+            JsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+        }
 
         private async Task ShowCardInfo(string cardNumber)
         {
@@ -20,10 +30,14 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             HttpResponseMessage response = await httpClient.GetAsync($"Cards/{cardNumber}");
 
+
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                _hoveredCard = JsonSerializer.Deserialize<CardReadDetailDTO>(apiResponse);
+
+                Response<CardReadDetailDTO> result = JsonSerializer.Deserialize<Response<CardReadDetailDTO>>(apiResponse, JsonOptions);
+
+                _hoveredCard = result.Data;
             }
             else
             {

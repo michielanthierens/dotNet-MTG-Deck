@@ -10,6 +10,10 @@ namespace Howest.MagicCards.Web.Components.Pages
     {
         [Parameter]
         public IEnumerable<CardReadDTO> Cards { get; set; }
+
+        [Parameter]
+        public EventCallback GetDeck { get; set; }
+
         private CardReadDetailDTO _hoveredCard = new ();
         public string message { get; set; }
 
@@ -60,8 +64,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                // todo refresh deck
-                StateHasChanged();
+                await GetDeck.InvokeAsync(card);
             }
             else
             {

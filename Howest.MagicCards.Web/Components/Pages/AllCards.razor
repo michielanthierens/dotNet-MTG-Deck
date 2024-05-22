@@ -71,13 +71,15 @@
     }
     else
     {
-        <FilteredCardsList Cards="@filteredCards"></FilteredCardsList>
-
+        <FilteredCardsList Cards="@filteredCards" GetDeck="@GetDeck"></FilteredCardsList>
     }
 </div>
 
 @code {
     BlazorFilter blazorFilter = new();
+
+    [Parameter]
+    public EventCallback GetDeck { get; set; }
 
     private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
     private IEnumerable<CardReadDTO> filteredCards { get; set; }

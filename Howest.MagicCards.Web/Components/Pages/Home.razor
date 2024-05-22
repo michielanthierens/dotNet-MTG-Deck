@@ -9,7 +9,7 @@
 
 <div id="body">
     <div id="allCards">
-        <AllCards/>
+        <AllCards GetDeck="getDeck"/>
     </div>
 
     <div id="deckCards">
@@ -24,15 +24,15 @@
     private string message;
 
     public Home() {
-    JsonOptions = new JsonSerializerOptions
+        JsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
         };
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
-
+        await getDeck();
     }
 
     public async Task getDeck()

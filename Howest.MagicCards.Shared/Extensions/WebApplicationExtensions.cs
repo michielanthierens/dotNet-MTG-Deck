@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Howest.MagicCards.WebAPI.Extensions
+namespace Howest.MagicCards.Shared.Extensions
 {
     public static class WebApplicationExtensions
     {

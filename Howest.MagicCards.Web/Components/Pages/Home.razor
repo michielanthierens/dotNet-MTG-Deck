@@ -29,19 +29,16 @@
         };
     }
 
-    protected override async void OnInitialized()
-    {
-        await getDeck();
-    }
-
     public async Task getDeck()
     {
+        
+
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
 
         HttpResponseMessage response = await httpClient.GetAsync("");
 
         string apiResponse = await response.Content.ReadAsStringAsync();
-        
+
 
 
         if (response.IsSuccessStatusCode)
@@ -61,5 +58,7 @@
         {
             message = $"Error: {response.ReasonPhrase}";
         }
+
+        StateHasChanged();
     }
 }

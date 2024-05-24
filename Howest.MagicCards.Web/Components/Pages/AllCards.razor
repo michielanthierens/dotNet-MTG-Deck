@@ -3,7 +3,6 @@
 @using System.Text.RegularExpressions;
 @rendermode InteractiveServer
 
-
 <div class="filter">
     <EditForm Model="@blazorFilter" OnValidSubmit="@LoadFilteredCards"  FormName="CardFilter" class="form">
         <div class="form-group">
@@ -71,7 +70,7 @@
     }
     else
     {
-        <FilteredCardsList Cards="@filteredCards" GetDeck="@GetDeck"></FilteredCardsList>
+        <FilteredCardsList Cards="@filteredCards" GetDeck="GetDeck"></FilteredCardsList>
     }
 </div>
 

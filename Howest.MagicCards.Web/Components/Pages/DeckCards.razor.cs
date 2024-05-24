@@ -27,6 +27,12 @@ namespace Howest.MagicCards.Web.Components.Pages
             await getDeck();
         }
 
+        protected override async Task OnParametersSetAsync()
+        {
+            await getDeck();
+            StateHasChanged();
+        }
+
         public async Task getDeck()
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
@@ -41,7 +47,7 @@ namespace Howest.MagicCards.Web.Components.Pages
                 if (apiResponseObj != null && apiResponseObj.Succeeded)
                 {
                     deckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
-                    message = apiResponseObj.Message;
+                    message = "";
                 }
                 else
                 {
@@ -70,11 +76,10 @@ namespace Howest.MagicCards.Web.Components.Pages
             if (response.IsSuccessStatusCode)
             {
                 await getDeck();
-                StateHasChanged();
             }
             else
             {
-                message = $"Error: {response.ReasonPhrase}";
+                message = $"Error: could not remove card";
             }
         }
 
@@ -94,11 +99,10 @@ namespace Howest.MagicCards.Web.Components.Pages
             if (response.IsSuccessStatusCode)
             {
                 await getDeck();
-                StateHasChanged();
             }
             else
             {
-                message = $"Error: {response.ReasonPhrase}";
+                message = $"Error: could not add card";
             }
         }
 
@@ -115,7 +119,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
             else
             {
-                message = $"Error: {response.ReasonPhrase}";
+                message = $"Error: could not clear deck";
             }
         }
     }

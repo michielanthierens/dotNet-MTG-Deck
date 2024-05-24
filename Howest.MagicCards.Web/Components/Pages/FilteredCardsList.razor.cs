@@ -65,12 +65,14 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                await GetDeck.InvokeAsync(card);
+                await GetDeck.InvokeAsync();
             }
             else
             {
                 message = $"Error: {response.ReasonPhrase}";
             }
+
+            await GetDeck.InvokeAsync();
         }
     }
 }

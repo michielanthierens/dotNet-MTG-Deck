@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Howest.MagicCards.WebAPI.Wrappers
+﻿namespace Howest.MagicCards.WebAPI.Wrappers
 {
     public class PagedResponse<T> : Response<T>
     {

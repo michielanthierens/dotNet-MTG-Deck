@@ -1,5 +1,4 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Howest.MagicCards.Shared.Extensions;
 

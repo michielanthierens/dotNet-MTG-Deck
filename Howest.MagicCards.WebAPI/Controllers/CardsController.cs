@@ -74,7 +74,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_1
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    new Response<CardReadDTO>()
+                    new Response<CardReadDTO>() //to inenumerable
                     {
                         Succeeded = false,
                         Errors = [$"Status code: {StatusCodes.Status500InternalServerError}"],

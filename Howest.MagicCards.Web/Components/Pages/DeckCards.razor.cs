@@ -1,5 +1,7 @@
-﻿using Howest.MagicCards.DAL.Models;
+﻿using Howest.MagicCards.Shared.DTO;
+using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Components;
+using System.Text;
 using System.Text.Json;
 
 namespace Howest.MagicCards.Web.Components.Pages
@@ -7,7 +9,7 @@ namespace Howest.MagicCards.Web.Components.Pages
     public partial class DeckCards
     {
         [Parameter]
-        public IEnumerable<DeckCard> deckCards { get; set; }
+        public IEnumerable<DeckReadDTO> deckCards { get; set; }
         [Parameter]
         public string message { get; set; }
         private JsonSerializerOptions JsonOptions { get; }
@@ -35,7 +37,16 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                deckCards = JsonSerializer.Deserialize<IEnumerable<DeckCard>>(apiResponse, JsonOptions);
+                var apiResponseObj = JsonSerializer.Deserialize<Response<IEnumerable<DeckReadDTO>>>(apiResponse, JsonOptions);
+                if (apiResponseObj != null && apiResponseObj.Succeeded)
+                {
+                    deckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
+                    message = apiResponseObj.Message;
+                }
+                else
+                {
+                    message = apiResponseObj?.Message;
+                }
             }
             else
             {
@@ -43,12 +54,18 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        async Task removeCardFromDeck(DeckCard card)
+        async Task removeCardFromDeck(DeckReadDTO card)
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
             var content = new StringContent(string.Empty);
+            
+            DeckPutDTO updateCard = new DeckPutDTO { Id = card.MtgId, Name = card.Name };
 
-            HttpResponseMessage response = await httpClient.PutAsync($"remove?id={card.id}&name={card.name}", content);
+            string json = JsonSerializer.Serialize(updateCard);
+
+            content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PutAsync($"remove", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -61,12 +78,18 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        public async Task AddCardToDeck(DeckCard card)
+        public async Task AddCardToDeck(DeckReadDTO card)
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
             var content = new StringContent(string.Empty);
 
-            HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.id}&name={card.name}", content);
+            DeckPutDTO updateCard = new DeckPutDTO { Id = card.MtgId, Name = card.Name };
+
+            string json = JsonSerializer.Serialize(updateCard);
+
+            content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PutAsync($"add", content);
 
             if (response.IsSuccessStatusCode)
             {

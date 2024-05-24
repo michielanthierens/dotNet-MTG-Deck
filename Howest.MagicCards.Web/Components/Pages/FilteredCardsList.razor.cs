@@ -1,6 +1,7 @@
 ﻿using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Components;
+using System.Text;
 using System.Text.Json;
 
 
@@ -54,7 +55,13 @@ namespace Howest.MagicCards.Web.Components.Pages
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
             var content = new StringContent(string.Empty);
 
-            HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.MtgId}&name={card.Name}", content);
+            DeckPutDTO updateCard = new DeckPutDTO { Id = card.MtgId, Name = card.Name };
+
+            string json = JsonSerializer.Serialize(updateCard);
+
+            content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PutAsync($"add", content);
 
             if (response.IsSuccessStatusCode)
             {

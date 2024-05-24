@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using Howest.MagicCards.DAL.Models;
 @inject IHttpClientFactory httpClientFactory
 
 
@@ -19,7 +18,7 @@
 
 
 @code {
-    private IEnumerable<DeckCard> deckCards { get; set; }
+    private IEnumerable<DeckReadDTO> deckCards { get; set; }
     private JsonSerializerOptions JsonOptions { get; }
     private string message;
 
@@ -42,10 +41,21 @@
         HttpResponseMessage response = await httpClient.GetAsync("");
 
         string apiResponse = await response.Content.ReadAsStringAsync();
+        
+
 
         if (response.IsSuccessStatusCode)
         {
-            deckCards = JsonSerializer.Deserialize<IEnumerable<DeckCard>>(apiResponse, JsonOptions);
+            var apiResponseObj = JsonSerializer.Deserialize<Response<IEnumerable<DeckReadDTO>>>(apiResponse, JsonOptions);
+            if (apiResponseObj != null && apiResponseObj.Succeeded)
+            {
+                deckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
+                message = apiResponseObj.Message;
+            }
+            else
+            {
+                message = apiResponseObj?.Message;
+            }
         }
         else
         {

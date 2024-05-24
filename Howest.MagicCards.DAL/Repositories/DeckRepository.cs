@@ -39,18 +39,18 @@ public class DeckRepository : IDeckRepository
 
         if (await checkDeckSizeAsync())
         {
-            DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
+            DeckCard foundCard = deckCollection.Find(card => card.Id == id).FirstOrDefault();
 
             if (foundCard != null)
             {
-                foundCard.amount++;
-                var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
-                var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
+                foundCard.Amount++;
+                var filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
+                var update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
                 deckCollection.UpdateOne(filter, update);
             }
             else
             {
-                deckCollection.InsertOne(new DeckCard() { id = id, name = name, amount = 1 });
+                deckCollection.InsertOne(new DeckCard() { Id = id, Name = name, Amount = 1 });
             }
         }
     }
@@ -59,20 +59,20 @@ public class DeckRepository : IDeckRepository
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
 
-        DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
+        DeckCard foundCard = deckCollection.Find(card => card.Id == id).FirstOrDefault();
 
         if (foundCard != null)
         {
-            if (foundCard.amount > 1)
+            if (foundCard.Amount > 1)
             {
-                foundCard.amount--;
-                var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
-                var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
+                foundCard.Amount--;
+                var filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
+                var update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
                 deckCollection.UpdateOne(filter, update);
             }
             else
             {
-                deckCollection.DeleteOne(card => card.id == id);
+                deckCollection.DeleteOne(card => card.Id == id);
             }
         }
     }
@@ -86,7 +86,7 @@ public class DeckRepository : IDeckRepository
     private async Task<bool> checkDeckSizeAsync()
     {
         IEnumerable<DeckCard> cards = await GetDeck();
-        int totalAmount = cards.Sum(Card => Card.amount);
+        int totalAmount = cards.Sum(Card => Card.Amount);
 
         if (totalAmount < _maxDeckSize) {
             return true;        

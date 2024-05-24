@@ -43,7 +43,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_1
 
             try
             {
-                if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
+                if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO>? cachedResult))
                 {
                     cachedResult = await _cardRepo.getAllCards()
                                 .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
@@ -117,7 +117,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
             try
             {
-                if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO> cachedResult))
+                if (!_cache.TryGetValue(_key, out IEnumerable<CardReadDTO>? cachedResult))
                 {
                     cachedResult = await _cardRepo.getAllCards()
                                 .ToFilteredList(filter.Name, filter.Set, filter.ArtistName, filter.RarityCode, filter.Type, filter.Text)
@@ -168,7 +168,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
             try
             {
-                if (_cache.TryGetValue(_key, out CardReadDetailDTO cachedCard)) return Ok(new Response<CardReadDetailDTO>(cachedCard));
+                if (_cache.TryGetValue(_key, out CardReadDetailDTO? cachedCard)) return Ok(new Response<CardReadDetailDTO>(cachedCard));
 
                 Card card = await _cardRepo.GetCardbyId(id);
 
@@ -210,7 +210,7 @@ namespace Howest.MagicCards.WebAPI.Controllers.V1_5
 
             try
             {
-                if (!_cache.TryGetValue(_key, out IEnumerable<RarityDTO> cachedResult))
+                if (!_cache.TryGetValue(_key, out IEnumerable<RarityDTO>? cachedResult))
                 {
                     cachedResult = await _cardRepo.GetRarities()                                
                                 .ProjectTo<RarityDTO>(_mapper.ConfigurationProvider)

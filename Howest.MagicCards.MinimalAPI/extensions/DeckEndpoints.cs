@@ -25,7 +25,7 @@ public static class DeckEndpoints
                     Message = $"deck fetched"
                 });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Results.StatusCode(StatusCodes.Status500InternalServerError);         
             }
@@ -43,7 +43,7 @@ public static class DeckEndpoints
             });
         });
 
-        deckGroup.MapPut("/remove", async (DeckPutDTO newCard, [FromServices] IDeckRepository deckRepo) =>
+        deckGroup.MapPut("/remove",(DeckPutDTO newCard, [FromServices] IDeckRepository deckRepo) =>
         {
             deckRepo.removeCardFromDeck(newCard.Id);
             return Results.Ok(new Response<DeckPutDTO>

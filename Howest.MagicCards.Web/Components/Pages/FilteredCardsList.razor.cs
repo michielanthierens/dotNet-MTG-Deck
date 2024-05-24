@@ -53,7 +53,7 @@ namespace Howest.MagicCards.Web.Components.Pages
         public async Task AddCardToDeck(CardReadDTO card)
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
-            var content = new StringContent(string.Empty);
+            StringContent content = new StringContent(string.Empty);
 
             DeckPutDTO updateCard = new DeckPutDTO { Id = card.MtgId, Name = card.Name };
 

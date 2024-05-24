@@ -44,8 +44,8 @@ public class DeckRepository : IDeckRepository
             if (foundCard != null)
             {
                 foundCard.Amount++;
-                var filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
-                var update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
+                FilterDefinition<DeckCard> filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
+                UpdateDefinition<DeckCard> update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
                 deckCollection.UpdateOne(filter, update);
             }
             else
@@ -66,8 +66,8 @@ public class DeckRepository : IDeckRepository
             if (foundCard.Amount > 1)
             {
                 foundCard.Amount--;
-                var filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
-                var update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
+                FilterDefinition<DeckCard> filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
+                UpdateDefinition<DeckCard> update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
                 deckCollection.UpdateOne(filter, update);
             }
             else

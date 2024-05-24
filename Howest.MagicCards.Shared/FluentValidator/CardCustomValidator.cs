@@ -24,6 +24,3 @@ public class CardCustomValidator : AbstractValidator<DeckCard>
             .NotNull();
     }
 }
-
-
-// gebruik ook voor CardViewModel in (nodig voor blazor)

@@ -43,7 +43,7 @@
 
         if (response.IsSuccessStatusCode)
         {
-            var apiResponseObj = JsonSerializer.Deserialize<Response<IEnumerable<DeckReadDTO>>>(apiResponse, JsonOptions);
+            Response<IEnumerable<DeckReadDTO>> apiResponseObj = JsonSerializer.Deserialize<Response<IEnumerable<DeckReadDTO>>>(apiResponse, JsonOptions);
             if (apiResponseObj != null && apiResponseObj.Succeeded)
             {
                 deckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();

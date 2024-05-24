@@ -103,7 +103,7 @@
         HttpClient httpClient = httpClientFactory.CreateClient("WebAPI");
         httpClient.DefaultRequestHeaders.Add("api-version", "1.5");
 
-        var queryParams = new Dictionary<string, string>();
+        Dictionary<string, string> queryParams = new ();
 
         if (!string.IsNullOrEmpty(blazorFilter.Name))
             queryParams.Add("Name", blazorFilter.Name);

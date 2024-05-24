@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-var (builder, services, conf) = WebApplication.CreateBuilder(args);
+(WebApplicationBuilder? builder, IServiceCollection? services, ConfigurationManager? conf) = WebApplication.CreateBuilder(args);
 
 services.AddControllers();
 services.AddEndpointsApiExplorer();
@@ -59,7 +59,7 @@ builder.Services.AddVersionedApiExplorer(
     }
 );
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {

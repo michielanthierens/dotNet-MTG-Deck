@@ -125,7 +125,7 @@ div#deckCards {
     cursor: pointer;
 }
 
-.cardInfo {
+/*.cardInfo {
     position: absolute;
     top: 0;
     left: 0;
@@ -142,7 +142,30 @@ div#deckCards {
 
     opacity: 0.9;
     transform: translateY(0);
+}*/
+
+.cardInfo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid black;
+    padding: 10px;
+    z-index: 100;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    opacity: 0; /* Start with the card info hidden */
+    visibility: hidden; /* Start with the card info hidden */
+    transition: opacity 0.5s ease, visibility 0.5s ease; /* Add transition */
 }
+
+.cardImage:hover .cardInfo {
+    opacity: 1; /* Show the card info */
+    visibility: visible; /* Show the card info */
+    transform: translateY(0);
+}
+
 
 .deck {
     padding: 20px;

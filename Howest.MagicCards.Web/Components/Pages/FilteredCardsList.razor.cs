@@ -49,12 +49,6 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        private void HideCardInfo()
-        {
-            _hoveredCard = null;
-            message = string.Empty;
-        }
-
         public async Task AddCardToDeck(CardReadDTO card)
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");

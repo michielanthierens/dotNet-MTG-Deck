@@ -53,6 +53,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             if (response.IsSuccessStatusCode)
             {
                 await getDeck();
+                StateHasChanged();
             }
             else
             {
@@ -70,6 +71,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             if (response.IsSuccessStatusCode)
             {
                 await getDeck();
+                StateHasChanged();
             }
             else
             {

@@ -12,7 +12,6 @@
             @onclick:preventDefault="true"
             @onclick="@(() => AddCardToDeck(card))"
             @onmouseover="() => ShowCardInfo(card.MtgId)" 
-            @onmouseout="HideCardInfo"
              >
 
             <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.MtgId"   />

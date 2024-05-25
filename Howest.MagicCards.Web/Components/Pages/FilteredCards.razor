@@ -34,8 +34,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // getRarities();
-
         await LoadFilteredCards();        
     }
 
@@ -84,6 +82,4 @@
             Message = $"Error: {response.ReasonPhrase}";
         }
     }
-
-    
 }

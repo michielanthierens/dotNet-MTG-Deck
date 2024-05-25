@@ -10,6 +10,7 @@ using Howest.MagicCards.Shared.Extensions;
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
+
 services.AddFluentValidationAutoValidation();
 
 services.AddSingleton<IDeckRepository, DeckRepository>();

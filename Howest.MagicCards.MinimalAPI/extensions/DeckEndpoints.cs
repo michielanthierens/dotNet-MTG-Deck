@@ -2,7 +2,7 @@
 using Howest.MagicCards.DAL.Models;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.DTO;
-using Howest.MagicCards.WebAPI.Wrappers;
+using Howest.MagicCards.Shared.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Howest.MagicCards.MinimalAPI.extensions;

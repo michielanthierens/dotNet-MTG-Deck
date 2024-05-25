@@ -17,13 +17,13 @@ services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1.1", new OpenApiInfo
     {
-        Title = "Books API version 1.1",
+        Title = "Card API version 1.1",
         Version = "v1.1",
         Description = "API to return cards"
     });
     c.SwaggerDoc("v1.5", new OpenApiInfo
     {
-        Title = "Books API version 1.5",
+        Title = "Card API version 1.5",
         Version = "v1.5",
         Description = "API to return cards"
     });

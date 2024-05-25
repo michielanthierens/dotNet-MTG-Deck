@@ -1,11 +1,13 @@
 @inject IHttpClientFactory httpClientFactory
 @rendermode InteractiveServer
 
-
 <div>
-    <h2>deck</h2>
-
+    <div id="titleDeckContainer">
+        <h2>deck</h2>
+        <p id="amountOfCards"><em>@AmountOfCardsInDeck</em> / 60</p>
+    </div>
     <p class="error">@message</p>
+
     <div class="deck">
 
         @if (deckCards != null && deckCards.Any())

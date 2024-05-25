@@ -1,4 +1,4 @@
-﻿namespace Howest.MagicCards.WebAPI.Wrappers
+﻿namespace Howest.MagicCards.Shared.Wrappers
 {
     public class PagedResponse<T> : Response<T>
     {

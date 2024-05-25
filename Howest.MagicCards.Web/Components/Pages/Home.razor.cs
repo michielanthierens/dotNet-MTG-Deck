@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Howest.MagicCards.Shared.DTO;
-using Howest.MagicCards.WebAPI.Wrappers;
+using Howest.MagicCards.Shared.Wrappers;
 
 namespace Howest.MagicCards.Web.Components.Pages;
 
@@ -8,6 +8,8 @@ public partial class Home
 {
     private IEnumerable<DeckReadDTO> DeckCards { get; set; }
     private JsonSerializerOptions JsonOptions { get; }
+    public int? AmountOfCardsInDeck { get; set; }
+
     private string _message;
 
     public Home()
@@ -33,15 +35,26 @@ public partial class Home
             {
                 DeckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
                 _message = null;
+                CalculateAmount(DeckCards);
             }
             else
             {
                 _message = apiResponseObj?.Message;
+                AmountOfCardsInDeck = null;
             }
         }
         else
         {
             _message = $"Error: {response.ReasonPhrase}";
+        }
+    }
+
+    private void CalculateAmount(IEnumerable<DeckReadDTO> cards)
+    {
+        AmountOfCardsInDeck = 0;
+        foreach (DeckReadDTO card in cards)
+        {
+            AmountOfCardsInDeck += card.Amount;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Howest.MagicCards.Shared.DTO;
-using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Components;
 using System.Text;
 using System.Text.Json;
+using Howest.MagicCards.Shared.Wrappers;
 
 
 namespace Howest.MagicCards.Web.Components.Pages;
@@ -50,7 +50,12 @@ public partial class FilteredCardsList
         }
     }
 
-    public async Task AddCardToDeck(CardReadDTO card)
+    private void HideCardInfo()
+    {
+        _hoveredCard = null;
+    }
+
+    private async Task AddCardToDeck(CardReadDTO card)
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
         StringContent content = new StringContent(string.Empty);

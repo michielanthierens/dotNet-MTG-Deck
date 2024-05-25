@@ -1,8 +1,8 @@
 ﻿using Howest.MagicCards.Shared.DTO;
-using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Components;
 using System.Text;
 using System.Text.Json;
+using Howest.MagicCards.Shared.Wrappers;
 
 namespace Howest.MagicCards.Web.Components.Pages;
 
@@ -12,6 +12,8 @@ public partial class DeckCards
     public IEnumerable<DeckReadDTO> deckCards { get; set; }
     [Parameter]
     public string message { get; set; }
+    [Parameter]
+    public int? AmountOfCardsInDeck { get; set; }
     private JsonSerializerOptions JsonOptions { get; }
 
     public DeckCards()
@@ -46,7 +48,8 @@ public partial class DeckCards
             if (apiResponseObj != null && apiResponseObj.Succeeded)
             {
                 deckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
-                message = "";
+                message = null;
+                CalculateAmount(deckCards);
             }
             else
             {
@@ -56,6 +59,15 @@ public partial class DeckCards
         else
         {
             message = $"Error: {response.ReasonPhrase}";
+        }
+    }
+
+    private void CalculateAmount(IEnumerable<DeckReadDTO> cards)
+    {
+        AmountOfCardsInDeck = 0;
+        foreach (DeckReadDTO card in cards)
+        {
+            AmountOfCardsInDeck += card.Amount;
         }
     }
 

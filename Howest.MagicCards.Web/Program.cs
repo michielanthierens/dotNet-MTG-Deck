@@ -1,28 +1,26 @@
 using Howest.MagicCards.Web.Components;
+using Howest.MagicCards.Shared.Extensions;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+(WebApplicationBuilder builder, IServiceCollection services, ConfigurationManager conf) = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
+services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddHttpClient("WebAPI", client =>
+services.AddHttpClient("WebAPI", client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("WebAPI"));
+    client.BaseAddress = new Uri(conf.GetConnectionString("WebAPI"));
 });
 
-builder.Services.AddHttpClient("MinimalAPI", client =>
+services.AddHttpClient("MinimalAPI", client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration.GetConnectionString("MinimalApi"));
+    client.BaseAddress = new Uri(conf.GetConnectionString("MinimalApi"));
 });
 
 WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

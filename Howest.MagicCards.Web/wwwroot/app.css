@@ -153,24 +153,23 @@ div#deckCards {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem; /* Optional: adds some padding around the container */
+    padding: 1rem;
 }
 
     #titleDeckContainer h2 {
-        margin: 0; /* Removes default margin */
+        margin: 0;
         flex: 1;
-        text-align: center; /* Centers the h2 element */
+        text-align: center; 
     }
 
     #titleDeckContainer p {
-        margin: 0; /* Removes default margin */
+        margin: 0;
         text-align: right;
     }
 
 
 .deck {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px 20px 20px;
     border-radius: 5px;
 }
 

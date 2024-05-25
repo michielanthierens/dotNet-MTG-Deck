@@ -1,15 +1,14 @@
-﻿namespace Howest.MagicCards.WebAPI.extensions
+﻿namespace Howest.MagicCards.WebAPI.extensions;
+
+public static class WebApplicationExtensions
 {
-    public static class WebApplicationExtensions
+    public static void Deconstruct(this WebApplicationBuilder builder,
+        out WebApplicationBuilder applicationBuilder,
+        out IServiceCollection services,
+        out ConfigurationManager configuration)
     {
-        public static void Deconstruct(this WebApplicationBuilder builder,
-            out WebApplicationBuilder applicationBuilder,
-            out IServiceCollection services,
-            out ConfigurationManager configuration)
-        {
-            applicationBuilder = builder;
-            services = builder.Services;
-            configuration = builder.Configuration;
-        }
+        applicationBuilder = builder;
+        services = builder.Services;
+        configuration = builder.Configuration;
     }
 }

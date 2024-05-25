@@ -1,6 +1,7 @@
 ﻿using Howest.MagicCards.Shared.DTO;
 using Howest.MagicCards.WebAPI.Wrappers;
 using Microsoft.AspNetCore.Components;
+using System.Text;
 using System.Text.Json;
 
 
@@ -10,6 +11,10 @@ namespace Howest.MagicCards.Web.Components.Pages
     {
         [Parameter]
         public IEnumerable<CardReadDTO> Cards { get; set; }
+
+        [Parameter]
+        public EventCallback GetDeck { get; set; }
+
         private CardReadDetailDTO _hoveredCard = new ();
         public string message { get; set; }
 
@@ -45,27 +50,29 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        private void HideCardInfo()
-        {
-            _hoveredCard = null;
-            message = string.Empty;
-        }
-
         public async Task AddCardToDeck(CardReadDTO card)
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
-            var content = new StringContent(string.Empty);
+            StringContent content = new StringContent(string.Empty);
 
-            HttpResponseMessage response = await httpClient.PutAsync($"add?id={card.MtgId}&name={card.Name}", content);
+            DeckPutDTO updateCard = new DeckPutDTO { Id = card.MtgId, Name = card.Name };
+
+            string json = JsonSerializer.Serialize(updateCard);
+
+            content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PutAsync($"add", content);
 
             if (response.IsSuccessStatusCode)
             {
-                // todo refresh deck
+                await GetDeck.InvokeAsync();
             }
             else
             {
                 message = $"Error: {response.ReasonPhrase}";
             }
+
+            await GetDeck.InvokeAsync();
         }
     }
 }

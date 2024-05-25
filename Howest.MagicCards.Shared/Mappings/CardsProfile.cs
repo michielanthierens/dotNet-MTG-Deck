@@ -22,6 +22,14 @@ public class CardsProfile : Profile
         CreateMap<Rarity, RarityDTO>()
             .ForMember(dto => dto.RarityCode, opt => opt.MapFrom(r => r.Code))
             .ForMember(dto => dto.Rarity, opt => opt.MapFrom(r => r.Name));
+
+        CreateMap<DeckCard, DeckReadDTO>()
+            .ForMember(dto => dto.MtgId, opt => opt.MapFrom(dc => dc.Id));
+
+        CreateMap<DeckCard, DeckPutDTO>()
+            .ForMember(dto => dto.Id, opt => opt.MapFrom((dc => dc.Id)))
+            .ForMember(dto => dto.Name, opt => opt.MapFrom((dc => dc.Name)));
+        
     }
 
     

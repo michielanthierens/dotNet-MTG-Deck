@@ -1,17 +1,14 @@
-
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.Shared.Mappings;
 using Howest.MagicCards.WebAPI.BehaviourConf;
-using Howest.MagicCards.WebAPI.Extensions;
+using Howest.MagicCards.Shared.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-var (builder, services, conf) = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
+(WebApplicationBuilder? builder, IServiceCollection? services, ConfigurationManager? conf) = WebApplication.CreateBuilder(args);
 
 services.AddControllers();
 services.AddEndpointsApiExplorer();
@@ -57,21 +54,13 @@ o.ApiVersionReader = ApiVersionReader.Combine(
 builder.Services.AddVersionedApiExplorer(
     options =>
     {
-        // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
-        // note: the specified format code will format the version as "'v'major[.minor][-status]"
         options.GroupNameFormat = "'v'VVV";
-
-        // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
-        // can also be used to control the format of the API version in route templates
         options.SubstituteApiVersionInUrl = true;
     }
 );
 
+WebApplication app = builder.Build();
 
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

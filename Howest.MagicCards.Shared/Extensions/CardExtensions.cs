@@ -1,5 +1,4 @@
 ﻿using Howest.MagicCards.DAL.Models;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Howest.MagicCards.Shared.Extensions;
 
@@ -9,40 +8,21 @@ public static class CardExtensions
     {
         IQueryable<Card> filteredCards = cards;
 
-        if (name != null)
-        {
-            filteredCards = filteredCards.Where(card => card.Name.Contains(name));
-        }
-
-        if (set != null)
-        {
-            filteredCards = filteredCards.Where(card => card.SetCodeNavigation.Name.Contains(set));
-        }
-
-        if (artistName != null)
-        {
-            filteredCards = filteredCards.Where(card => card.Artist.FullName.Contains(artistName));
-        }
-
-        if (rarityCode != null)
-        {
-            filteredCards = filteredCards.Where(card => card.RarityCode.Equals(rarityCode));
-        }
-
-        if (type != null)
-        {
-            filteredCards = filteredCards.Where(card =>
-                card.Type.Contains(type));
-        }
-
-        if (text != null)
-        {
-            filteredCards = filteredCards.Where(card => card.Text.Contains(text));
-        }
+        filteredCards = ApplyFilter(filteredCards, name != null, q => q.Where(card => card.Name.Contains(name)));
+        filteredCards = ApplyFilter(filteredCards, set != null, q => q.Where(card => card.SetCodeNavigation.Name.Contains(set)));
+        filteredCards = ApplyFilter(filteredCards, artistName != null, q => q.Where(card => card.Artist.FullName.Contains(artistName)));
+        filteredCards = ApplyFilter(filteredCards, rarityCode != null, q => q.Where(card => card.RarityCode.Equals(rarityCode)));
+        filteredCards = ApplyFilter(filteredCards, type != null, q => q.Where(card => card.Type.Contains(type)));
+        filteredCards = ApplyFilter(filteredCards, text != null, q => q.Where(card => card.Text.Contains(text)));
 
         filteredCards = filteredCards.Where(card => card.OriginalImageUrl != null);
 
         return filteredCards;
+    }
+
+    public static IQueryable<Card> ApplyFilter(IQueryable<Card> query, bool condition, Func<IQueryable<Card>, IQueryable<Card>> filter)
+    {
+        return condition ? filter(query) : query;
     }
 
     public static IQueryable<Card> SortOnCardName(this IQueryable<Card> cards, string orderByQueryString)
@@ -53,7 +33,6 @@ public static class CardExtensions
             "desc" => cards.OrderByDescending(card => card.Name),
             _ => cards,
         };
-
     }
 
     public static IQueryable<Card> ToFilteredListGraphQL(this IQueryable<Card> cards, int? power, int? toughness)

@@ -1,5 +1,3 @@
-@using Amazon.Runtime
-@using Howest.MagicCards.WebAPI.Wrappers
 @inject IHttpClientFactory httpClientFactory
 @rendermode InteractiveServer
 
@@ -12,7 +10,6 @@
             @onclick:preventDefault="true"
             @onclick="@(() => AddCardToDeck(card))"
             @onmouseover="() => ShowCardInfo(card.MtgId)" 
-            @onmouseout="HideCardInfo"
              >
 
             <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.MtgId"   />

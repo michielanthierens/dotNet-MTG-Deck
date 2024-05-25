@@ -3,10 +3,10 @@ using GraphQL.Server.Ui.Playground;
 using Howest.MagicCards.DAL.DBContext;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.GraphQL.Schemas;
-using Howest.MagicCards.WebAPI.Extensions;
+using Howest.MagicCards.Shared.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-var (builder, services, conf) = WebApplication.CreateBuilder(args);
+(WebApplicationBuilder builder, IServiceCollection services, ConfigurationManager conf) = WebApplication.CreateBuilder(args);
 
 services.AddDbContext<MtgContext>
     (options => options.UseSqlServer(conf.GetConnectionString("mtgDB")));
@@ -19,7 +19,7 @@ services.AddGraphQL()
     .AddDataLoader()
     .AddSystemTextJson();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 app.UseGraphQL<RootSchema>();
 

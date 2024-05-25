@@ -15,7 +15,7 @@ public class DeckRepository : IDeckRepository
         _connectionString = conf.GetConnectionString(name: "mongoDB");
         _databaseName = conf.GetConnectionString(name: "database");
         _deckCollection = conf.GetConnectionString(name: "collection");
-        _maxDeckSize = conf.GetValue<int>("MaxDeckSize");
+        _maxDeckSize = int.Parse(conf["MaxDeckSize"] ?? throw new InvalidOperationException());
     }
 
     private IMongoCollection<T> ConnectToMongoDB<T>(in string collection)
@@ -39,18 +39,18 @@ public class DeckRepository : IDeckRepository
 
         if (await checkDeckSizeAsync())
         {
-            DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
+            DeckCard foundCard = deckCollection.Find(card => card.Id == id).FirstOrDefault();
 
             if (foundCard != null)
             {
-                foundCard.amount++;
-                var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
-                var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
-                deckCollection.UpdateOne(filter, update);
+                foundCard.Amount++;
+                FilterDefinition<DeckCard> filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
+                UpdateDefinition<DeckCard> update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
+                await deckCollection.UpdateOneAsync(filter, update);
             }
             else
             {
-                deckCollection.InsertOne(new DeckCard() { id = id, name = name, amount = 1 });
+                await deckCollection.InsertOneAsync(new DeckCard() { Id = id, Name = name, Amount = 1 });
             }
         }
     }
@@ -59,21 +59,19 @@ public class DeckRepository : IDeckRepository
     {
         IMongoCollection<DeckCard> deckCollection = ConnectToMongoDB<DeckCard>(_deckCollection);
 
-        DeckCard foundCard = deckCollection.Find(card => card.id == id).FirstOrDefault();
+        DeckCard foundCard = deckCollection.Find(card => card.Id == id).FirstOrDefault();
 
-        if (foundCard != null)
+        if (foundCard == null) return;
+        if (foundCard.Amount > 1)
         {
-            if (foundCard.amount > 1)
-            {
-                foundCard.amount--;
-                var filter = Builders<DeckCard>.Filter.Eq(c => c.id, id);
-                var update = Builders<DeckCard>.Update.Set(c => c.amount, foundCard.amount);
-                deckCollection.UpdateOne(filter, update);
-            }
-            else
-            {
-                deckCollection.DeleteOne(card => card.id == id);
-            }
+            foundCard.Amount--;
+            FilterDefinition<DeckCard> filter = Builders<DeckCard>.Filter.Eq(c => c.Id, id);
+            UpdateDefinition<DeckCard> update = Builders<DeckCard>.Update.Set(c => c.Amount, foundCard.Amount);
+            deckCollection.UpdateOne(filter, update);
+        }
+        else
+        {
+            deckCollection.DeleteOne(card => card.Id == id);
         }
     }
 
@@ -86,12 +84,8 @@ public class DeckRepository : IDeckRepository
     private async Task<bool> checkDeckSizeAsync()
     {
         IEnumerable<DeckCard> cards = await GetDeck();
-        int totalAmount = cards.Sum(Card => Card.amount);
+        int totalAmount = cards.Sum(Card => Card.Amount);
 
-        if (totalAmount < _maxDeckSize) {
-            return true;        
-        }
-        return false;
-
+        return totalAmount < _maxDeckSize;
     }
 }

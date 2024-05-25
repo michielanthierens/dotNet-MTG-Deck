@@ -1,14 +1,13 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace Howest.MagicCards.DAL.Models;
 public class DeckCard
 {
     [BsonId]
     [BsonRequired]
-    public string id { get; set; }
+    public string Id { get; set; }
     [BsonRequired]
-    public string name { get; set; }
+    public string Name { get; set; }
     [BsonRequired]
-    public int amount { get; set; }
+    public int Amount { get; set; }
 }

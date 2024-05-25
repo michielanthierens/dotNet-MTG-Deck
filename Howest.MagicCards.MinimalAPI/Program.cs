@@ -3,9 +3,10 @@ using FluentValidation.AspNetCore;
 using Howest.MagicCards.DAL.Repositories;
 using Howest.MagicCards.MinimalAPI.extensions;
 using Howest.MagicCards.Shared.FluentValidator;
-using Howest.MagicCards.WebAPI.extensions;
+using Howest.MagicCards.Shared.Mappings;
+using Howest.MagicCards.Shared.Extensions;
 
-var (builder, services, conf) = WebApplication.CreateBuilder(args);
+(WebApplicationBuilder builder, IServiceCollection services, _) = WebApplication.CreateBuilder(args);
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
@@ -13,9 +14,9 @@ services.AddFluentValidationAutoValidation();
 
 services.AddSingleton<IDeckRepository, DeckRepository>();
 services.AddValidatorsFromAssemblyContaining<CardCustomValidator>();
-//todo change to own apibehaviourconf
+services.AddAutoMapper(typeof(CardsProfile));
 
-WebApplication app = builder.Build();
+WebApplication app = builder.Build();   
 
 if (app.Environment.IsDevelopment())
 {

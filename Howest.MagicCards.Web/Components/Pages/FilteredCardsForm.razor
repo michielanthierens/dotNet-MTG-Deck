@@ -1,0 +1,63 @@
+﻿@inject IHttpClientFactory httpClientFactory
+@rendermode InteractiveServer
+
+<div class="filter">
+    <EditForm Model="@BlazorFilter" OnValidSubmit="@LoadFilteredCards" FormName="CardFilter" class="form">
+        <div class="form-group">
+            <label for="Name">Name: </label>
+            <InputText id="Name" @bind-Value="@BlazorFilter.Name" class="form-control" DisplayName="Name:"/>
+        </div>
+        <div class="form-group">
+            <label for="Set">Set:</label>
+            <InputText id="Set" @bind-Value="@BlazorFilter.Set" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="ArtistName">Artist:</label>
+            <InputText id="ArtistName" @bind-Value="@BlazorFilter.ArtistName" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="RarityCode">Rarity:</label>
+            <InputSelect id="RarityCode" @bind-Value="@BlazorFilter.RarityCode" class="form-control">
+                @if (Rarities != null && Rarities.Any())
+                {
+                    <option value="">all</option>
+                    @foreach (RarityDTO rarity in Rarities)
+                    {
+                        <option value="@rarity.RarityCode">@rarity.Rarity</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>Loading rarities...</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label for="Type">Type:</label>
+            <InputText id="Type" @bind-Value="@BlazorFilter.Type" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="Text">Text:</label>
+            <InputText id="Text" @bind-Value="@BlazorFilter.Text" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="Sort">Sorting order:</label>
+            <InputSelect id="Sort" @bind-Value="@BlazorFilter.Sort" class="form-control">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </InputSelect>
+        </div>
+        <div class="form-group">
+            <label for="PageSize">Number of results:</label>
+            <InputNumber id="PageSize" @bind-Value="@BlazorFilter.PageSize" class="form-control"></InputNumber>
+        </div>
+        <div class="form-group">
+            <label for="PageNumber">Page:</label>
+            <InputNumber id="PageNumber" @bind-Value="@BlazorFilter.PageNumber" class="form-control"></InputNumber>
+        </div>
+
+        <button type="submit">Search</button>
+        <p class="error">@Message</p>
+    </EditForm>
+</div>
+

@@ -14,7 +14,7 @@
                 @foreach (DeckReadDTO card in deckCards)
                 {
                     <div class="deckCardInstance">
-                        <button @onclick="()=>removeCardFromDeck(card)" class="deckRemoveButton"> - </button>
+                        <button @onclick="()=>RemoveCardFromDeck(card)" class="deckRemoveButton"> - </button>
                         <div class="deckName">@card.Name</div>
                         <button @onclick="()=>AddCardToDeck(card)" class="deckAmount">@card.Amount</button>
                     </div>

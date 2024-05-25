@@ -22,13 +22,17 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
         }
 
+        protected override async Task OnInitializedAsync()
+        {
+            await GetDeck();
+        }
+
         protected override async Task OnParametersSetAsync()
         {
-            await getDeck();
             StateHasChanged();
         }
 
-        public async Task getDeck()
+        public async Task GetDeck()
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
 
@@ -55,7 +59,7 @@ namespace Howest.MagicCards.Web.Components.Pages
             }
         }
 
-        async Task removeCardFromDeck(DeckReadDTO card)
+        async Task RemoveCardFromDeck(DeckReadDTO card)
         {
             HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
             StringContent content = new StringContent(string.Empty);
@@ -70,7 +74,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                await getDeck();
+                await GetDeck();
             }
             else
             {
@@ -93,7 +97,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                await getDeck();
+                await GetDeck();
             }
             else
             {
@@ -110,7 +114,7 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                await getDeck();
+                await GetDeck();
             }
             else
             {

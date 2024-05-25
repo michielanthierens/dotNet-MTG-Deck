@@ -28,11 +28,6 @@
         };
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await GetDeck();
-    }
-
     private async Task GetDeck()
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
@@ -47,7 +42,7 @@
             if (apiResponseObj is { Succeeded: true })
             {
                 DeckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
-                _message = apiResponseObj.Message;
+                _message = null;
             }
             else
             {

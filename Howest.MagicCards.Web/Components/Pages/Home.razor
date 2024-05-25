@@ -8,19 +8,18 @@
 
 <div id="body">
     <div id="allCards">
-        <AllCards GetDeck="getDeck"/>
+        <FilteredCards GetDeck="GetDeck"/>
     </div>
-
     <div id="deckCards">
-        <DeckCards deckCards="@deckCards" message="@message"/>
+        <DeckCards deckCards="@DeckCards" message="@_message"/>
     </div>
 </div>
 
 
 @code {
-    private IEnumerable<DeckReadDTO> deckCards { get; set; }
+    private IEnumerable<DeckReadDTO> DeckCards { get; set; }
     private JsonSerializerOptions JsonOptions { get; }
-    private string message;
+    private string _message;
 
     public Home() {
         JsonOptions = new JsonSerializerOptions
@@ -29,34 +28,30 @@
         };
     }
 
-    public async Task getDeck()
+    public async Task GetDeck()
     {
-        
-
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
 
         HttpResponseMessage response = await httpClient.GetAsync("");
 
         string apiResponse = await response.Content.ReadAsStringAsync();
 
-
-
         if (response.IsSuccessStatusCode)
         {
             Response<IEnumerable<DeckReadDTO>> apiResponseObj = JsonSerializer.Deserialize<Response<IEnumerable<DeckReadDTO>>>(apiResponse, JsonOptions);
-            if (apiResponseObj != null && apiResponseObj.Succeeded)
+            if (apiResponseObj is { Succeeded: true })
             {
-                deckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
-                message = apiResponseObj.Message;
+                DeckCards = apiResponseObj.Data ?? new List<DeckReadDTO>();
+                _message = apiResponseObj.Message;
             }
             else
             {
-                message = apiResponseObj?.Message;
+                _message = apiResponseObj?.Message;
             }
         }
         else
         {
-            message = $"Error: {response.ReasonPhrase}";
+            _message = $"Error: {response.ReasonPhrase}";
         }
 
         StateHasChanged();

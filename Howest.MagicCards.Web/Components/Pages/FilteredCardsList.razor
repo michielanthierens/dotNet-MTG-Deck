@@ -9,8 +9,8 @@
         <div class="cardImage" 
             @onclick:preventDefault="true"
             @onclick="@(() => AddCardToDeck(card))"
-            @onmouseover="() => ShowCardInfo(card.MtgId)" 
-             >
+            @onmouseover="() => ShowCardInfo(card.MtgId)"
+            @onmouseleave="HideCardInfo">
 
             <img src="@card.OriginalImageUrl" alt="@card.Name" id="@card.MtgId"   />
 

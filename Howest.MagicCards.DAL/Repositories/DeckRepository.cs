@@ -15,7 +15,7 @@ public class DeckRepository : IDeckRepository
         _connectionString = conf.GetConnectionString(name: "mongoDB");
         _databaseName = conf.GetConnectionString(name: "database");
         _deckCollection = conf.GetConnectionString(name: "collection");
-        _maxDeckSize = conf.GetValue<int>("MaxDeckSize");
+        _maxDeckSize = int.Parse(conf["MaxDeckSize"]);
     }
 
     private IMongoCollection<T> ConnectToMongoDB<T>(in string collection)

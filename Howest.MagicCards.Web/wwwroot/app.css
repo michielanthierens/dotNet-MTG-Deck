@@ -149,6 +149,25 @@ div#deckCards {
     transform: translateY(0);
 }
 
+#titleDeckContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem; /* Optional: adds some padding around the container */
+}
+
+    #titleDeckContainer h2 {
+        margin: 0; /* Removes default margin */
+        flex: 1;
+        text-align: center; /* Centers the h2 element */
+    }
+
+    #titleDeckContainer p {
+        margin: 0; /* Removes default margin */
+        text-align: right;
+    }
+
+
 .deck {
     padding-left: 20px;
     padding-right: 20px;

@@ -22,11 +22,6 @@ namespace Howest.MagicCards.Web.Components.Pages
             };
         }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await getDeck();
-        }
-
         protected override async Task OnParametersSetAsync()
         {
             await getDeck();

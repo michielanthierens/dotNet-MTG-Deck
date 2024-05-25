@@ -16,9 +16,8 @@ namespace Howest.MagicCards.Web.Components.Pages
         [Parameter]
         public EventCallback LoadFilteredCards { get; set; }
 
-        private IEnumerable<RarityDTO> rarities { get; set; } = new List<RarityDTO>();
+        private IEnumerable<RarityDTO> Rarities { get; set; } = new List<RarityDTO>();
         private JsonSerializerOptions JsonOptions { get; }
-
 
         public FilteredCardsForm()
         {
@@ -31,7 +30,6 @@ namespace Howest.MagicCards.Web.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             GetRarities();
-
         }
 
         private async void GetRarities()
@@ -45,11 +43,11 @@ namespace Howest.MagicCards.Web.Components.Pages
 
             if (response.IsSuccessStatusCode)
             {
-                rarities = JsonSerializer.Deserialize<IEnumerable<RarityDTO>>(apiResponse, JsonOptions);
+                Rarities = JsonSerializer.Deserialize<IEnumerable<RarityDTO>>(apiResponse, JsonOptions);
             }
             else
             {
-                rarities = new List<RarityDTO>();
+                Rarities = new List<RarityDTO>();
                 Message = $"Error: {response.ReasonPhrase}";
             }
         }

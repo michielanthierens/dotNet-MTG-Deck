@@ -1,6 +1,6 @@
 ﻿@page "/"
 @inject IHttpClientFactory httpClientFactory
-
+@rendermode InteractiveServer
 
 <PageTitle>MTG Deck Builder</PageTitle>
 
@@ -8,7 +8,7 @@
 
 <div id="body">
     <div id="allCards">
-        <FilteredCards GetDeck="GetDeck"/>
+        <FilteredCards GetDeck="@GetDeck"/>
     </div>
     <div id="deckCards">
         <DeckCards deckCards="@DeckCards" message="@_message"/>
@@ -28,7 +28,12 @@
         };
     }
 
-    public async Task GetDeck()
+    protected override async Task OnInitializedAsync()
+    {
+        await GetDeck();
+    }
+
+    private async Task GetDeck()
     {
         HttpClient httpClient = httpClientFactory.CreateClient("MinimalAPI");
 
@@ -53,7 +58,5 @@
         {
             _message = $"Error: {response.ReasonPhrase}";
         }
-
-        StateHasChanged();
     }
 }

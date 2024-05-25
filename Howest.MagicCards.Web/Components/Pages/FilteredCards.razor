@@ -1,6 +1,5 @@
 @inject IHttpClientFactory httpClientFactory
 @rendermode InteractiveServer
-
 <FilteredCardsForm BlazorFilter="@_blazorFilter" Message="@Message" LoadFilteredCards="@LoadFilteredCards"></FilteredCardsForm>
 <div class="allCards">
     @if (filteredCards == null)

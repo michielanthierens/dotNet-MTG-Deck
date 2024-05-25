@@ -25,7 +25,6 @@ public static class CardExtensions
         return condition ? filter(query) : query;
     }
 
-
     public static IQueryable<Card> SortOnCardName(this IQueryable<Card> cards, string orderByQueryString)
     {
         return orderByQueryString switch
@@ -34,7 +33,6 @@ public static class CardExtensions
             "desc" => cards.OrderByDescending(card => card.Name),
             _ => cards,
         };
-
     }
 
     public static IQueryable<Card> ToFilteredListGraphQL(this IQueryable<Card> cards, int? power, int? toughness)

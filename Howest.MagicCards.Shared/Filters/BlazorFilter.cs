@@ -13,10 +13,10 @@ namespace Howest.MagicCards.Shared.Filters
         [Required]
         public string? Sort { get; set; } = "asc";
         [Required]
-        [Range(0, 150)]
+        [Range(1, 150)]
         public int? PageSize { get; set; } = 150;
         [Required]
-        [Range(0, 70000)]
+        [Range(1, 70000)]
         public int? PageNumber { get; set; } = 1;
     }
 }

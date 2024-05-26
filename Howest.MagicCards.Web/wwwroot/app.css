@@ -144,7 +144,6 @@ div#deckCards {
 }
 
 .cardImage:hover .cardInfo {
-
     opacity: 0.9;
     transform: translateY(0);
 }
@@ -156,16 +155,20 @@ div#deckCards {
     padding: 1rem;
 }
 
-    #titleDeckContainer h2 {
-        margin: 0;
-        flex: 1;
-        text-align: center; 
-    }
+#titleDeckContainer h2 {
+    margin: 0;
+    flex: 1;
+    text-align: center; 
+}
 
-    #titleDeckContainer p {
-        margin: 0;
-        text-align: right;
-    }
+#titleDeckContainer p {
+    margin: 0;
+    text-align: right;
+}
+
+li.validation-message {
+    font-weight: bold;
+}
 
 
 .deck {

@@ -2,8 +2,6 @@
 
 public record CardReadDetailDTO
 {
-    public string Number { get; set; }
-
     public string CardName { get; set; }
 
     public string Power { get; set; }
@@ -21,12 +19,6 @@ public record CardReadDetailDTO
     public string Text { get; set; }
 
     public string ArtistName { get; set; }
-
-    public string OriginalImageUrl { get; set; }
-
-    public string Image { get; set; }
-
-    public string OriginalType { get; set; }
 
     public string MtgId { get; set; }
 }

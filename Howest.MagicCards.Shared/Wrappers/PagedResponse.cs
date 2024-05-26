@@ -4,6 +4,7 @@
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        // TotalPages could be used to set upper limit in PageSize validation.
         public int TotalPages { get => (int)Math.Ceiling(TotalRecords / (double)PageSize); }
         public int TotalRecords { get; set; }
 
